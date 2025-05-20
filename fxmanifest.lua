@@ -1,9 +1,9 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-author 'Kakarot'
-description 'Core resource for the framework, contains all the core functionality and features'
-version '1.3.0'
+author 'Kakarot (QB-Core), OnlyF0uR'
+description 'Core resource for the framework, adapted from QB-Core'
+version '1.0.0'
 
 shared_scripts {
     'config.lua',
@@ -16,7 +16,8 @@ shared_scripts {
     'shared/vehicles.lua',
     'shared/gangs.lua',
     'shared/weapons.lua',
-    'shared/locations.lua'
+    'shared/locations.lua',
+    'shared/vehiclekeys.lua',
 }
 
 client_scripts {
@@ -24,7 +25,12 @@ client_scripts {
     'client/functions.lua',
     'client/loops.lua',
     'client/events.lua',
-    'client/drawtext.lua'
+    'client/vehiclekeys.lua',
+    'client/weathersync.lua',
+    'client/modifications.lua',
+    'client/emotes.lua',
+    'client/deathcam.lua',
+    'client/weapons.lua',
 }
 
 server_scripts {
@@ -35,16 +41,9 @@ server_scripts {
     'server/events.lua',
     'server/commands.lua',
     'server/exports.lua',
-    'server/debug.lua'
-}
-
-ui_page 'html/index.html'
-
-files {
-    'html/index.html',
-    'html/css/style.css',
-    'html/css/drawtext.css',
-    'html/js/*.js'
+    'server/debug.lua',
+    'server/vehiclekeys.lua',
+    'server/weathersync.lua'
 }
 
 dependency 'oxmysql'

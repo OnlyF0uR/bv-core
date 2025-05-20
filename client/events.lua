@@ -1,44 +1,44 @@
 -- Player load and unload handling
 -- New method for checking if logged in across all scripts (optional)
 -- if LocalPlayer.state['isLoggedIn'] then
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('Core:Client:OnPlayerLoaded', function()
     ShutdownLoadingScreenNui()
     LocalPlayer.state:set('isLoggedIn', true, false)
-    if not QBCore.Config.Server.PVP then return end
+    if not Core.Config.Server.PVP then return end
     SetCanAttackFriendly(PlayerPedId(), true, false)
     NetworkSetFriendlyFireOption(true)
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('Core:Client:OnPlayerUnload', function()
     LocalPlayer.state:set('isLoggedIn', false, false)
 end)
 
-RegisterNetEvent('QBCore:Client:PvpHasToggled', function(pvp_state)
+RegisterNetEvent('Core:Client:PvpHasToggled', function(pvp_state)
     SetCanAttackFriendly(PlayerPedId(), pvp_state, false)
     NetworkSetFriendlyFireOption(pvp_state)
 end)
 -- Teleport Commands
 
-RegisterNetEvent('QBCore:Command:TeleportToPlayer', function(coords)
+RegisterNetEvent('Core:Command:TeleportToPlayer', function(coords)
     local ped = PlayerPedId()
     SetPedCoordsKeepVehicle(ped, coords.x, coords.y, coords.z)
 end)
 
-RegisterNetEvent('QBCore:Command:TeleportToCoords', function(x, y, z, h)
+RegisterNetEvent('Core:Command:TeleportToCoords', function(x, y, z, h)
     local ped = PlayerPedId()
     SetPedCoordsKeepVehicle(ped, x, y, z)
     SetEntityHeading(ped, h or GetEntityHeading(ped))
 end)
 
-RegisterNetEvent('QBCore:Command:GoToMarker', function()
+RegisterNetEvent('Core:Command:GoToMarker', function()
     local PlayerPedId = PlayerPedId
     local GetEntityCoords = GetEntityCoords
     local GetGroundZFor_3dCoord = GetGroundZFor_3dCoord
 
     local blipMarker <const> = GetFirstBlipInfoId(8)
     if not DoesBlipExist(blipMarker) then
-        QBCore.Functions.Notify(Lang:t('error.no_waypoint'), 'error', 5000)
-        return 'marker'
+        Core.Functions.Notify(Lang:t('error.no_waypoint'), 'error', 5000)
+        return
     end
 
     -- Fade screen to hide how clients get teleported.
@@ -108,17 +108,17 @@ RegisterNetEvent('QBCore:Command:GoToMarker', function()
         -- If we can't find the coords, set the coords to the old ones.
         -- We don't unpack them before since they aren't in a loop and only called once.
         SetPedCoordsKeepVehicle(ped, oldCoords['x'], oldCoords['y'], oldCoords['z'] - 1.0)
-        QBCore.Functions.Notify(Lang:t('error.tp_error'), 'error', 5000)
+        Core.Functions.Notify(Lang:t('error.tp_error'), 'error', 5000)
     end
 
     -- If Z coord was found, set coords in found coords.
     SetPedCoordsKeepVehicle(ped, x, y, groundZ)
-    QBCore.Functions.Notify(Lang:t('success.teleported_waypoint'), 'success', 5000)
+    Core.Functions.Notify(Lang:t('success.teleported_waypoint'), 'success', 5000)
 end)
 
 -- Vehicle Commands
 
-RegisterNetEvent('QBCore:Command:SpawnVehicle', function(vehName)
+RegisterNetEvent('Core:Command:SpawnVehicle', function(vehName)
     local ped = PlayerPedId()
     local hash = joaat(vehName)
     local veh = GetVehiclePedIsUsing(ped)
@@ -128,7 +128,7 @@ RegisterNetEvent('QBCore:Command:SpawnVehicle', function(vehName)
         Wait(0)
     end
 
-    if IsPedInAnyVehicle(ped) then
+    if IsPedInAnyVehicle(ped, true) then
         SetEntityAsMissionEntity(veh, true, true)
         DeleteVehicle(veh)
     end
@@ -138,10 +138,10 @@ RegisterNetEvent('QBCore:Command:SpawnVehicle', function(vehName)
     SetVehicleFuelLevel(vehicle, 100.0)
     SetVehicleDirtLevel(vehicle, 0.0)
     SetModelAsNoLongerNeeded(hash)
-    TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(vehicle))
+    TriggerEvent('core:client:SetVehicleOwner', Core.Functions.GetPlate(vehicle))
 end)
 
-RegisterNetEvent('QBCore:Command:DeleteVehicle', function()
+RegisterNetEvent('Core:Command:DeleteVehicle', function()
     local ped = PlayerPedId()
     local veh = GetVehiclePedIsUsing(ped)
     if veh ~= 0 then
@@ -159,13 +159,8 @@ RegisterNetEvent('QBCore:Command:DeleteVehicle', function()
     end
 end)
 
-RegisterNetEvent('QBCore:Client:VehicleInfo', function(info)
-    local plate = QBCore.Functions.GetPlate(info.vehicle)
-    local hasKeys = true
-
-    if GetResourceState('qb-vehiclekeys') == 'started' then
-        hasKeys = exports['qb-vehiclekeys']:HasKeys(plate)
-    end
+RegisterNetEvent('Core:Client:VehicleInfo', function(info)
+    local plate = Core.Functions.GetPlate(info.vehicle)
 
     local data = {
         vehicle = info.vehicle,
@@ -174,57 +169,57 @@ RegisterNetEvent('QBCore:Client:VehicleInfo', function(info)
         plate = plate,
         driver = GetPedInVehicleSeat(info.vehicle, -1),
         inseat = GetPedInVehicleSeat(info.vehicle, info.seat),
-        haskeys = hasKeys
+        haskeys = HasKeys(plate),
     }
 
-    TriggerEvent('QBCore:Client:' .. info.event .. 'Vehicle', data)
+    TriggerEvent('Core:Client:' .. info.event .. 'Vehicle', data)
 end)
 
 -- Other stuff
 
-RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
-    QBCore.PlayerData = val
+RegisterNetEvent('Core:Player:SetPlayerData', function(val)
+    Core.PlayerData = val
 end)
 
-RegisterNetEvent('QBCore:Player:UpdatePlayerData', function()
-    TriggerServerEvent('QBCore:UpdatePlayer')
+RegisterNetEvent('Core:Player:UpdatePlayerData', function()
+    TriggerServerEvent('Core:UpdatePlayer')
 end)
 
-RegisterNetEvent('QBCore:Notify', function(text, type, length, icon)
-    QBCore.Functions.Notify(text, type, length, icon)
+RegisterNetEvent('Core:Notify', function(text, type, length, icon)
+    Core.Functions.Notify(text, type, length, icon)
 end)
 
 -- This event is exploitable and should not be used. It has been deprecated, and will be removed soon.
-RegisterNetEvent('QBCore:Client:UseItem', function(item)
-    QBCore.Debug(string.format('%s triggered QBCore:Client:UseItem by ID %s with the following data. This event is deprecated due to exploitation, and will be removed soon. Check qb-inventory for the right use on this event.', GetInvokingResource(), GetPlayerServerId(PlayerId())))
-    QBCore.Debug(item)
+RegisterNetEvent('Core:Client:UseItem', function(item)
+    Core.Debug(string.format('%s triggered Core:Client:UseItem by ID %s with the following data. This event is deprecated due to exploitation, and will be removed soon. Check qb-inventory for the right use on this event.', GetInvokingResource(), GetPlayerServerId(PlayerId())))
+    Core.Debug(item)
 end)
 
 RegisterNUICallback('getNotifyConfig', function(_, cb)
-    cb(QBCore.Config.Notify)
+    cb(Core.Config.Notify)
 end)
 
 -- Callback Events --
 
 -- Client Callback
-RegisterNetEvent('QBCore:Client:TriggerClientCallback', function(name, ...)
-    if not QBCore.ClientCallbacks[name] then return end
+RegisterNetEvent('Core:Client:TriggerClientCallback', function(name, ...)
+    if not Core.ClientCallbacks[name] then return end
 
-    QBCore.ClientCallbacks[name](function(...)
-        TriggerServerEvent('QBCore:Server:TriggerClientCallback', name, ...)
+    Core.ClientCallbacks[name](function(...)
+        TriggerServerEvent('Core:Server:TriggerClientCallback', name, ...)
     end, ...)
 end)
 
 -- Server Callback
-RegisterNetEvent('QBCore:Client:TriggerCallback', function(name, ...)
-    if QBCore.ServerCallbacks[name] then
-        QBCore.ServerCallbacks[name].promise:resolve(...)
+RegisterNetEvent('Core:Client:TriggerCallback', function(name, ...)
+    if Core.ServerCallbacks[name] then
+        Core.ServerCallbacks[name].promise:resolve(...)
 
-        if QBCore.ServerCallbacks[name].callback then
-            QBCore.ServerCallbacks[name].callback(...)
+        if Core.ServerCallbacks[name].callback then
+            Core.ServerCallbacks[name].callback(...)
         end
 
-        QBCore.ServerCallbacks[name] = nil
+        Core.ServerCallbacks[name] = nil
     end
 end)
 
@@ -239,16 +234,16 @@ local function Draw3DText(coords, str)
         SetTextFont(4)
         SetTextColour(255, 255, 255, 255)
         SetTextEdge(2, 0, 0, 0, 150)
-        SetTextProportional(1)
+        SetTextProportional(true)
         SetTextOutline()
-        SetTextCentre(1)
+        SetTextCentre(true)
         BeginTextCommandDisplayText('STRING')
         AddTextComponentSubstringPlayerName(str)
         EndTextCommandDisplayText(worldX, worldY)
     end
 end
 
-RegisterNetEvent('QBCore:Command:ShowMe3D', function(senderId, msg)
+RegisterNetEvent('Core:Command:ShowMe3D', function(senderId, msg)
     local sender = GetPlayerFromServerId(senderId)
     CreateThread(function()
         local displayTime = 5000 + GetGameTimer()
@@ -262,18 +257,18 @@ RegisterNetEvent('QBCore:Command:ShowMe3D', function(senderId, msg)
 end)
 
 -- Listen to Shared being updated
-RegisterNetEvent('QBCore:Client:OnSharedUpdate', function(tableName, key, value)
-    QBCore.Shared[tableName][key] = value
-    TriggerEvent('QBCore:Client:UpdateObject')
+RegisterNetEvent('Core:Client:OnSharedUpdate', function(tableName, key, value)
+    Core.Shared[tableName][key] = value
+    TriggerEvent('Core:Client:UpdateObject')
 end)
 
-RegisterNetEvent('QBCore:Client:OnSharedUpdateMultiple', function(tableName, values)
+RegisterNetEvent('Core:Client:OnSharedUpdateMultiple', function(tableName, values)
     for key, value in pairs(values) do
-        QBCore.Shared[tableName][key] = value
+        Core.Shared[tableName][key] = value
     end
-    TriggerEvent('QBCore:Client:UpdateObject')
+    TriggerEvent('Core:Client:UpdateObject')
 end)
 
-RegisterNetEvent('QBCore:Client:SharedUpdate', function(table)
-    QBCore.Shared = table
+RegisterNetEvent('Core:Client:SharedUpdate', function(table)
+    Core.Shared = table
 end)

@@ -1,22 +1,22 @@
-QBCore = {}
-QBCore.Config = QBConfig
-QBCore.Shared = QBShared
-QBCore.ClientCallbacks = {}
-QBCore.ServerCallbacks = {}
+Core = {}
+Core.Config = Config
+Core.Shared = Shared
+Core.ClientCallbacks = {}
+Core.ServerCallbacks = {}
 
--- Get the full QBCore object (default behavior):
--- local QBCore = GetCoreObject()
+-- Get the full Core object (default behavior):
+-- local Core = GetCoreObject()
 
--- Get only specific parts of QBCore:
--- local QBCore = GetCoreObject({'Players', 'Config'})
+-- Get only specific parts of Core:
+-- local Core = GetCoreObject({'Players', 'Config'})
 
 local function GetCoreObject(filters)
-    if not filters then return QBCore end
+    if not filters then return Core end
     local results = {}
     for i = 1, #filters do
         local key = filters[i]
-        if QBCore[key] then
-            results[key] = QBCore[key]
+        if Core[key] then
+            results[key] = Core[key]
         end
     end
     return results
@@ -24,26 +24,26 @@ end
 exports('GetCoreObject', GetCoreObject)
 
 local function GetSharedItems()
-    return QBShared.Items
+    return Shared.Items
 end
 exports('GetSharedItems', GetSharedItems)
 
 local function GetSharedVehicles()
-    return QBShared.Vehicles
+    return Shared.Vehicles
 end
 exports('GetSharedVehicles', GetSharedVehicles)
 
 local function GetSharedWeapons()
-    return QBShared.Weapons
+    return Shared.Weapons
 end
 exports('GetSharedWeapons', GetSharedWeapons)
 
 local function GetSharedJobs()
-    return QBShared.Jobs
+    return Shared.Jobs
 end
 exports('GetSharedJobs', GetSharedJobs)
 
 local function GetSharedGangs()
-    return QBShared.Gangs
+    return Shared.Gangs
 end
 exports('GetSharedGangs', GetSharedGangs)

@@ -1,9 +1,9 @@
-QBShared = QBShared or {}
+Shared = Shared or {}
 
 local StringCharset = {}
 local NumberCharset = {}
 
-QBShared.StarterItems = {
+Shared.StarterItems = {
     ['phone'] = { amount = 1, item = 'phone' },
     ['id_card'] = { amount = 1, item = 'id_card' },
     ['driver_license'] = { amount = 1, item = 'driver_license' },
@@ -13,17 +13,17 @@ for i = 48, 57 do NumberCharset[#NumberCharset + 1] = string.char(i) end
 for i = 65, 90 do StringCharset[#StringCharset + 1] = string.char(i) end
 for i = 97, 122 do StringCharset[#StringCharset + 1] = string.char(i) end
 
-function QBShared.RandomStr(length)
+function Shared.RandomStr(length)
     if length <= 0 then return '' end
-    return QBShared.RandomStr(length - 1) .. StringCharset[math.random(1, #StringCharset)]
+    return Shared.RandomStr(length - 1) .. StringCharset[math.random(1, #StringCharset)]
 end
 
-function QBShared.RandomInt(length)
+function Shared.RandomInt(length)
     if length <= 0 then return '' end
-    return QBShared.RandomInt(length - 1) .. NumberCharset[math.random(1, #NumberCharset)]
+    return Shared.RandomInt(length - 1) .. NumberCharset[math.random(1, #NumberCharset)]
 end
 
-function QBShared.SplitStr(str, delimiter)
+function Shared.SplitStr(str, delimiter)
     local result = {}
     local from = 1
     local delim_from, delim_to = string.find(str, delimiter, from)
@@ -36,39 +36,39 @@ function QBShared.SplitStr(str, delimiter)
     return result
 end
 
-function QBShared.Trim(value)
+function Shared.Trim(value)
     if not value then return nil end
     return (string.gsub(value, '^%s*(.-)%s*$', '%1'))
 end
 
-function QBShared.FirstToUpper(value)
+function Shared.FirstToUpper(value)
     if not value then return nil end
     return (value:gsub("^%l", string.upper))
 end
 
-function QBShared.Round(value, numDecimalPlaces)
+function Shared.Round(value, numDecimalPlaces)
     if not numDecimalPlaces then return math.floor(value + 0.5) end
     local power = 10 ^ numDecimalPlaces
     return math.floor((value * power) + 0.5) / (power)
 end
 
-function QBShared.ChangeVehicleExtra(vehicle, extra, enable)
+function Shared.ChangeVehicleExtra(vehicle, extra, enable)
     if DoesExtraExist(vehicle, extra) then
         if enable then
             SetVehicleExtra(vehicle, extra, false)
             if not IsVehicleExtraTurnedOn(vehicle, extra) then
-                QBShared.ChangeVehicleExtra(vehicle, extra, enable)
+                Shared.ChangeVehicleExtra(vehicle, extra, enable)
             end
         else
             SetVehicleExtra(vehicle, extra, true)
             if IsVehicleExtraTurnedOn(vehicle, extra) then
-                QBShared.ChangeVehicleExtra(vehicle, extra, enable)
+                Shared.ChangeVehicleExtra(vehicle, extra, enable)
             end
         end
     end
 end
 
-function QBShared.IsFunction(value)
+function Shared.IsFunction(value)
     if type(value) == 'table' then
         return value.__cfx_functionReference ~= nil and type(value.__cfx_functionReference) == "string"
     end
@@ -76,7 +76,7 @@ function QBShared.IsFunction(value)
     return type(value) == 'function'
 end
 
-function QBShared.SetDefaultVehicleExtras(vehicle, config)
+function Shared.SetDefaultVehicleExtras(vehicle, config)
     -- Clear Extras
     for i = 1, 20 do
         if DoesExtraExist(vehicle, i) then
@@ -89,11 +89,11 @@ function QBShared.SetDefaultVehicleExtras(vehicle, config)
             enabled = true
         end
 
-        QBShared.ChangeVehicleExtra(vehicle, tonumber(id), enabled)
+        Shared.ChangeVehicleExtra(vehicle, tonumber(id), enabled)
     end
 end
 
-QBShared.MaleNoGloves = {
+Shared.MaleNoGloves = {
     [0] = true,
     [1] = true,
     [2] = true,
@@ -131,7 +131,7 @@ QBShared.MaleNoGloves = {
     [132] = true
 }
 
-QBShared.FemaleNoGloves = {
+Shared.FemaleNoGloves = {
     [0] = true,
     [1] = true,
     [2] = true,
@@ -173,3 +173,54 @@ QBShared.FemaleNoGloves = {
     [161] = true,
     [165] = true
 }
+
+-- ===========================================
+-- Accurate epoch-based millisecond timer
+function Shared.GetTimeInMilliseconds()
+    -- GetGameTimer() returns milliseconds since game start in FiveM
+    return GetGameTimer()
+end
+
+-- ===========================================
+-- Pad with leading "0" if number is less than 10
+local function leading0(number)
+    return number < 10 and "0" or ""
+end
+
+-- Format milliseconds into MM:SS.mmm string
+function Shared.FormatMilliseconds(ms)
+    local mins = math.floor(ms / 1000 / 60)
+    local secs = math.floor((ms / 1000) % 60)
+    local huns = math.floor(ms % 1000)
+
+    return string.format("%s%d:%s%d.%s%d",
+        leading0(mins), mins,
+        leading0(secs), secs,
+        leading0(huns), huns
+    )
+end
+
+-- ===========================================
+-- Calculate 2D Euclidean distance between two vector2 tables
+local function getdist(a, b)
+    return math.sqrt((a.x - b.x)^2 + (a.y - b.y)^2)
+end
+
+-- Check if vector3 `c` is approximately between `a` and `b`
+function Shared.IsBetween(aJson, bJson, cJson)
+    local a = json.decode(aJson)
+    local b = json.decode(bJson)
+    local c = json.decode(cJson)
+
+    local sum = getdist(a, c) + getdist(c, b)
+    local dist = getdist(a, b)
+
+    -- Margin to tolerate tick inaccuracies or float imprecision
+    return math.abs(dist - sum) < 0.1
+end
+
+-- ===========================================
+-- Generate pseudo-random float between min and max
+function Shared.RandomBetween(min, max)
+    return math.random() * (max - min) + min
+end
