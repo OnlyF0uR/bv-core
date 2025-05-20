@@ -43,7 +43,8 @@ server_scripts {
     'server/exports.lua',
     'server/debug.lua',
     'server/vehiclekeys.lua',
-    'server/weathersync.lua'
+    'server/weathersync.lua',
+    'server/weapons.lua',
 }
 
 dependency 'oxmysql'

@@ -6,8 +6,8 @@ local timer = 0
 local freezeTime = false
 local blackout = false
 
-RegisterNetEvent('core_adapters:weather:updateWeather')
-AddEventHandler('core_adapters:weather:updateWeather', function(NewWeather, newblackout)
+RegisterNetEvent('core-adapters:weather:updateWeather')
+AddEventHandler('core-adapters:weather:updateWeather', function(NewWeather, newblackout)
     CurrentWeather = NewWeather
     blackout = newblackout
 end)
@@ -39,8 +39,8 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('core_adapters:weather:updateTime')
-AddEventHandler('core_adapters:weather:updateTime', function(base, offset, freeze)
+RegisterNetEvent('core-adapters:weather:updateTime')
+AddEventHandler('core-adapters:weather:updateTime', function(base, offset, freeze)
     freezeTime = freeze
     timeOffset = offset
     baseTime = base
@@ -71,7 +71,7 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler('playerSpawned', function()
-    TriggerServerEvent('core_adapters:weather:requestSync')
+    TriggerServerEvent('core-adapters:weather:requestSync')
 end)
 
 Citizen.CreateThread(function()

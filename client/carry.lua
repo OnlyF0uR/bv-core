@@ -56,7 +56,7 @@ RegisterCommand("carry",function(source, args)
 			if targetSrc ~= -1 then
 				carry.InProgress = true
 				carry.targetSrc = targetSrc
-				TriggerServerEvent("core_adapters:carry:sync",targetSrc)
+				TriggerServerEvent("core-adapters:carry:sync",targetSrc)
 				Core.Functions.RequestAnimDict(carry.personCarrying.animDict)
 				carry.type = "carrying"
 			else
@@ -69,13 +69,13 @@ RegisterCommand("carry",function(source, args)
 		carry.InProgress = false
 		ClearPedSecondaryTask(PlayerPedId())
 		DetachEntity(PlayerPedId(), true, false)
-		TriggerServerEvent("core_adapters:carry:stop",carry.targetSrc)
+		TriggerServerEvent("core-adapters:carry:stop",carry.targetSrc)
 		carry.targetSrc = 0
 	end
 end,false)
 
-RegisterNetEvent("core_adapters:carry:syncTarget")
-AddEventHandler("core_adapters:carry:syncTarget", function(targetSrc)
+RegisterNetEvent("core-adapters:carry:syncTarget")
+AddEventHandler("core-adapters:carry:syncTarget", function(targetSrc)
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSrc))
 	carry.InProgress = true
 	Core.Functions.RequestAnimDict(carry.personCarried.animDict)
@@ -83,8 +83,8 @@ AddEventHandler("core_adapters:carry:syncTarget", function(targetSrc)
 	carry.type = "beingcarried"
 end)
 
-RegisterNetEvent("core_adapters:carry:cl_stop")
-AddEventHandler("core_adapters:carry:cl_stop", function()
+RegisterNetEvent("core-adapters:carry:cl_stop")
+AddEventHandler("core-adapters:carry:cl_stop", function()
 	carry.InProgress = false
 	ClearPedSecondaryTask(PlayerPedId())
 	DetachEntity(PlayerPedId(), true, false)

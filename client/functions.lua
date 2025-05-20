@@ -444,9 +444,16 @@ function Core.Functions.GetVehicleProperties(vehicle)
             xenonColor = GetVehicleXenonLightsColor(vehicle)
         end
 
+        
+        local class
+        if GetResourceState('bv-cars') ~= 'missing' then
+            class = exports['bv-cars']:GetCarClass(vehicle)
+        end
+
         return {
             model = GetEntityModel(vehicle),
             plate = Core.Functions.GetPlate(vehicle),
+            class = class,
             plateIndex = GetVehicleNumberPlateTextIndex(vehicle),
             bodyHealth = Core.Shared.Round(GetVehicleBodyHealth(vehicle), 0.1),
             engineHealth = Core.Shared.Round(GetVehicleEngineHealth(vehicle), 0.1),

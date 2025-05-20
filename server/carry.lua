@@ -3,30 +3,30 @@ local carrying = {}
 local carried = {}
 --carried[targetSource] = source, targetSource is being carried by source
 
-RegisterServerEvent("core_adapters:carry:sync")
-AddEventHandler("core_adapters:carry:sync", function(targetSrc)
+RegisterServerEvent("core-adapters:carry:sync")
+AddEventHandler("core-adapters:carry:sync", function(targetSrc)
 	local source = source
 	local sourcePed = GetPlayerPed(source)
    	local sourceCoords = GetEntityCoords(sourcePed)
 	local targetPed = GetPlayerPed(targetSrc)
         local targetCoords = GetEntityCoords(targetPed)
 	if #(sourceCoords - targetCoords) <= 3.0 then 
-		TriggerClientEvent("core_adapters:carry:syncTarget", targetSrc, source)
+		TriggerClientEvent("core-adapters:carry:syncTarget", targetSrc, source)
 		carrying[source] = targetSrc
 		carried[targetSrc] = source
 	end
 end)
 
-RegisterServerEvent("core_adapters:carry:stop")
-AddEventHandler("core_adapters:carry:stop", function(targetSrc)
+RegisterServerEvent("core-adapters:carry:stop")
+AddEventHandler("core-adapters:carry:stop", function(targetSrc)
 	local source = source
 
 	if carrying[source] then
-		TriggerClientEvent("core_adapters:carry:cl_stop", targetSrc)
+		TriggerClientEvent("core-adapters:carry:cl_stop", targetSrc)
 		carrying[source] = nil
 		carried[targetSrc] = nil
 	elseif carried[source] then
-		TriggerClientEvent("core_adapters:carry:cl_stop", carried[source])			
+		TriggerClientEvent("core-adapters:carry:cl_stop", carried[source])			
 		carrying[carried[source]] = nil
 		carried[source] = nil
 	end
@@ -36,13 +36,13 @@ AddEventHandler('playerDropped', function(reason)
 	local source = source
 	
 	if carrying[source] then
-		TriggerClientEvent("core_adapters:carry:cl_stop", carrying[source])
+		TriggerClientEvent("core-adapters:carry:cl_stop", carrying[source])
 		carried[carrying[source]] = nil
 		carrying[source] = nil
 	end
 
 	if carried[source] then
-		TriggerClientEvent("core_adapters:carry:cl_stop", carried[source])
+		TriggerClientEvent("core-adapters:carry:cl_stop", carried[source])
 		carrying[carried[source]] = nil
 		carried[source] = nil
 	end

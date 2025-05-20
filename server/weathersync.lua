@@ -11,10 +11,10 @@ local freezeTime = false
 local blackout = false
 local newWeatherTimer = 15
 
-RegisterServerEvent('core_adapters:weather:requestSync')
-AddEventHandler('core_adapters:weather:requestSync', function()
-    TriggerClientEvent('core_adapters:weather:updateWeather', -1, CurrentWeather, blackout)
-    TriggerClientEvent('core_adapters:weather:updateTime', -1, baseTime, timeOffset, freezeTime)
+RegisterServerEvent('core-adapters:weather:requestSync')
+AddEventHandler('core-adapters:weather:requestSync', function()
+    TriggerClientEvent('core-adapters:weather:updateWeather', -1, CurrentWeather, blackout)
+    TriggerClientEvent('core-adapters:weather:updateTime', -1, baseTime, timeOffset, freezeTime)
 end)
 
 RegisterCommand('freezetime', function(source, args)
@@ -77,7 +77,7 @@ RegisterCommand('weather', function(source, args)
                 print("Weather has been updated.")
                 CurrentWeather = string.upper(args[1])
                 newWeatherTimer = 15
-                TriggerEvent('core_adapters:weather:requestSync')
+                TriggerEvent('core-adapters:weather:requestSync')
             else
                 print("Invalid weather type, valid weather types are: \nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ")
             end
@@ -98,7 +98,7 @@ RegisterCommand('weather', function(source, args)
                     TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Changed weather to ' .. string.lower(args[1]) .. '.' })
                     CurrentWeather = string.upper(args[1])
                     newWeatherTimer = 15
-                    TriggerEvent('core_adapters:weather:requestSync')
+                    TriggerEvent('core-adapters:weather:requestSync')
                 else
                     TriggerClientEvent('chatMessage', source, '', {255, 255, 255},
                         '^8Error: ^1Invalid weather type, valid weather types are: ^0\nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ')
@@ -110,20 +110,20 @@ RegisterCommand('weather', function(source, args)
     end
 end, false)
 
-RegisterServerEvent('core_adapters:weather:toggleBlackout')
-AddEventHandler('core_adapters:weather:toggleBlackout', function()
+RegisterServerEvent('core-adapters:weather:toggleBlackout')
+AddEventHandler('core-adapters:weather:toggleBlackout', function()
     blackout = not blackout
     if blackout then
         TriggerClientEvent('mythic_notify:client:SendAlert', -1, { type = 'inform', text = 'Blackout enabled.' })
     else
         TriggerClientEvent('mythic_notify:client:SendAlert', -1, { type = 'inform', text = 'Blackout disabled.' })
     end
-    TriggerEvent('core_adapters:weather:requestSync')
+    TriggerEvent('core-adapters:weather:requestSync')
 end)
 
 RegisterCommand('blackout', function(source)
     if IsPlayerAceAllowed(source, "fu_sync.cmd") or source == 0 then
-        TriggerEvent('core_adapters:weather:toggleBlackout')
+        TriggerEvent('core-adapters:weather:toggleBlackout')
     end
 end)
 
@@ -151,7 +151,7 @@ RegisterCommand('time', function(source, args, rawCommand)
                 ShiftToMinute(0)
             end
             print("Time has changed to " .. argh .. ":" .. argm .. ".")
-            TriggerEvent('core_adapters:weather:requestSync')
+            TriggerEvent('core-adapters:weather:requestSync')
         else
             print("Invalid syntax, correct syntax is: time <hour> <minute>!")
         end
@@ -179,7 +179,7 @@ RegisterCommand('time', function(source, args, rawCommand)
                 end
 
                 TriggerClientEvent('mythic_notify:client:SendAlert', -1, { type = 'inform', text = 'Time was changed to ' .. newtime .. '.' })
-                TriggerEvent('core_adapters:weather:requestSync')
+                TriggerEvent('core-adapters:weather:requestSync')
             else
                 TriggerClientEvent('chatMessage', source, '', {255, 255, 255}, '^8Error: ^1Invalid syntax. Use ^0/time <hour> <minute> ^1instead!')
             end
@@ -203,14 +203,14 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5000)
-        TriggerClientEvent('core_adapters:weather:updateTime', -1, baseTime, timeOffset, freezeTime)
+        TriggerClientEvent('core-adapters:weather:updateTime', -1, baseTime, timeOffset, freezeTime)
     end
 end)
 
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(300000)
-        TriggerClientEvent('core_adapters:weather:updateWeather', -1, CurrentWeather, blackout)
+        TriggerClientEvent('core-adapters:weather:updateWeather', -1, CurrentWeather, blackout)
     end
 end)
 
@@ -259,5 +259,5 @@ function NextWeatherStage()
     elseif CurrentWeather == "SMOG" or CurrentWeather == "FOGGY" then
         CurrentWeather = "CLEAR"
     end
-    TriggerEvent("core_adapters:weather:requestSync")
+    TriggerEvent("core-adapters:weather:requestSync")
 end
