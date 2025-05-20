@@ -10,7 +10,6 @@ Shared.LockToggleAnimation = {
     WaitTime = 500,
 }
 Shared.LockAnimSound = "keys"
-Shared.LockToggleSound = "lock"
 Shared.LockToggleDist = 8.0
 
 -- NPC Vehicle Lock States

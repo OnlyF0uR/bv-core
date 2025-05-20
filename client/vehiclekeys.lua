@@ -166,12 +166,12 @@ RegisterKeyMapping('togglelocks', Lang:t('info.tlock'), 'keyboard', 'L')
 RegisterCommand('togglelocks', function()
     local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) then
-        ToggleVehicleLockswithoutnui(GetVehicle())
+        ToggleVehicleLocks(GetVehicle())
     else
         if Shared.UseKeyfob then
             openmenu()
         else
-            ToggleVehicleLockswithoutnui(GetVehicle())
+            ToggleVehicleLocks(GetVehicle())
         end
     end
 end)
@@ -310,12 +310,6 @@ end)
 -----------------------
 ----   Functions   ----
 -----------------------
-function openmenu()
-    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 0.5, 'key', 0.3)
-    SendNUIMessage({ casemenue = 'open' })
-    SetNuiFocus(true, true)
-end
-
 function ToggleEngine(veh)
     if veh then
         local EngineOn = GetIsVehicleEngineRunning(veh)
@@ -331,7 +325,7 @@ function ToggleEngine(veh)
     end
 end
 
-function ToggleVehicleLockswithoutnui(veh)
+function ToggleVehicleLocks(veh)
     if veh then
         if not isBlacklistedVehicle(veh) then
             if HasKeys(Core.Functions.GetPlate(veh)) or AreKeysJobShared(veh) then
@@ -349,7 +343,6 @@ function ToggleVehicleLockswithoutnui(veh)
 
                     Core.Functions.RequestAnimDict(Shared.LockToggleAnimation.AnimDict)
                     TaskPlayAnim(ped, Shared.LockToggleAnimation.AnimDict, Shared.LockToggleAnimation.Anim, 8.0, -8.0, -1, 52, 0, false, false, false)
-                    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5.0, Shared.LockAnimSound, 0.5)
                 end
 
                 Citizen.CreateThread(function()
@@ -357,7 +350,6 @@ function ToggleVehicleLockswithoutnui(veh)
                     if IsEntityPlayingAnim(ped, Shared.LockToggleAnimation.AnimDict, Shared.LockToggleAnimation.Anim, 3) then
                         StopAnimTask(ped, Shared.LockToggleAnimation.AnimDict, Shared.LockToggleAnimation.Anim, 8.0)
                     end
-                    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, Shared.LockToggleSound, 0.3)
 
                     if object ~= 0 and DoesEntityExist(object) then
                         DeleteObject(object)
@@ -369,9 +361,11 @@ function ToggleVehicleLockswithoutnui(veh)
                 if vehLockStatus == 1 then
                     TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(veh), 2)
                     Core.Functions.Notify(Lang:t('notify.vlock'), 'primary')
+                    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'lock', 1.0)
                 else
                     TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(veh), 1)
                     Core.Functions.Notify(Lang:t('notify.vunlock'), 'success')
+                    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'unlock', 1.0)
                 end
 
                 SetVehicleLights(veh, 2)

@@ -31,6 +31,7 @@ client_scripts {
     'client/emotes.lua',
     'client/deathcam.lua',
     'client/weapons.lua',
+    'client/holograms.lua'
 }
 
 server_scripts {
