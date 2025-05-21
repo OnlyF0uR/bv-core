@@ -1,49 +1,49 @@
 local carrying = {}
---carrying[source] = targetSource, source is carrying targetSource
+--carrying[src] = targetSource, src is carrying targetSource
 local carried = {}
---carried[targetSource] = source, targetSource is being carried by source
+--carried[targetSource] = src, targetSource is being carried by src
 
 RegisterServerEvent("core-adapters:carry:sync")
 AddEventHandler("core-adapters:carry:sync", function(targetSrc)
-	local source = source
-	local sourcePed = GetPlayerPed(source)
+	local src = source
+	local sourcePed = GetPlayerPed(src)
    	local sourceCoords = GetEntityCoords(sourcePed)
 	local targetPed = GetPlayerPed(targetSrc)
         local targetCoords = GetEntityCoords(targetPed)
 	if #(sourceCoords - targetCoords) <= 3.0 then 
-		TriggerClientEvent("core-adapters:carry:syncTarget", targetSrc, source)
-		carrying[source] = targetSrc
-		carried[targetSrc] = source
+		TriggerClientEvent("core-adapters:carry:syncTarget", targetSrc, src)
+		carrying[src] = targetSrc
+		carried[targetSrc] = src
 	end
 end)
 
 RegisterServerEvent("core-adapters:carry:stop")
 AddEventHandler("core-adapters:carry:stop", function(targetSrc)
-	local source = source
+	local src = source
 
-	if carrying[source] then
+	if carrying[src] then
 		TriggerClientEvent("core-adapters:carry:cl_stop", targetSrc)
-		carrying[source] = nil
+		carrying[src] = nil
 		carried[targetSrc] = nil
-	elseif carried[source] then
-		TriggerClientEvent("core-adapters:carry:cl_stop", carried[source])			
-		carrying[carried[source]] = nil
-		carried[source] = nil
+	elseif carried[src] then
+		TriggerClientEvent("core-adapters:carry:cl_stop", carried[src])			
+		carrying[carried[src]] = nil
+		carried[src] = nil
 	end
 end)
 
 AddEventHandler('playerDropped', function(reason)
-	local source = source
+	local src = source
 	
-	if carrying[source] then
-		TriggerClientEvent("core-adapters:carry:cl_stop", carrying[source])
-		carried[carrying[source]] = nil
-		carrying[source] = nil
+	if carrying[src] then
+		TriggerClientEvent("core-adapters:carry:cl_stop", carrying[src])
+		carried[carrying[src]] = nil
+		carrying[src] = nil
 	end
 
-	if carried[source] then
-		TriggerClientEvent("core-adapters:carry:cl_stop", carried[source])
-		carrying[carried[source]] = nil
-		carried[source] = nil
+	if carried[src] then
+		TriggerClientEvent("core-adapters:carry:cl_stop", carried[src])
+		carrying[carried[src]] = nil
+		carried[src] = nil
 	end
 end)

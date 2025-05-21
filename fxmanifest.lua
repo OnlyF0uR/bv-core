@@ -5,6 +5,8 @@ author 'Kakarot (QB-Core), OnlyF0uR'
 description 'Core resource for the framework, adapted from QB-Core'
 version '1.0.0'
 
+local postalFile = "client/new-postals.json"
+
 shared_scripts {
     'config.lua',
     'shared/locale.lua',
@@ -18,6 +20,7 @@ shared_scripts {
     'shared/weapons.lua',
     'shared/locations.lua',
     'shared/vehiclekeys.lua',
+    'shared/postalcodes.lua',
 }
 
 client_scripts {
@@ -31,7 +34,9 @@ client_scripts {
     'client/emotes.lua',
     'client/deathcam.lua',
     'client/weapons.lua',
-    'client/holograms.lua'
+    'client/holograms.lua',
+    'client/postalcodes.lua',
+    'client/dev.lua',
 }
 
 server_scripts {
@@ -46,6 +51,10 @@ server_scripts {
     'server/vehiclekeys.lua',
     'server/weathersync.lua',
     'server/weapons.lua',
+    'server/dev.lua',
 }
+
+file(postalFile)
+postal_file(postalFile)
 
 dependency 'oxmysql'

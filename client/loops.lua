@@ -1,3 +1,4 @@
+-- Player update interval
 CreateThread(function()
     while true do
         local sleep = 0
@@ -9,6 +10,7 @@ CreateThread(function()
     end
 end)
 
+-- Starvation interval
 CreateThread(function()
     while true do
         if LocalPlayer.state.isLoggedIn then

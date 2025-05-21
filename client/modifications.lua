@@ -16,7 +16,7 @@ local suppressedModels = {
 
 Citizen.CreateThread(function()
 	while true do
-	    Wait(0)
+	  Wait(0)
 
 	    -- Remove dispatch vehicles
 		for i = 1, 20 do
@@ -29,11 +29,11 @@ Citizen.CreateThread(function()
 		SetPlayerWantedLevelNoDrop(pid, 0, false)
 
 		-- Redu locals
-	    SetVehicleDensityMultiplierThisFrame(0.1) -- traffic density
-	    SetPedDensityMultiplierThisFrame(0.2) -- npc/ai peds density
-	    SetRandomVehicleDensityMultiplierThisFrame(0.1) -- random vehicles (car scenarios / cars driving off from a parking spot etc.)
-	    SetParkedVehicleDensityMultiplierThisFrame(0.0) -- random parked vehicles (parked car scenarios)
-	    SetScenarioPedDensityMultiplierThisFrame(0.0, 0.0) -- npc/ai peds or scenario peds
+	  SetVehicleDensityMultiplierThisFrame(0.1) -- traffic density
+	  SetPedDensityMultiplierThisFrame(0.2) -- npc/ai peds density
+	  SetRandomVehicleDensityMultiplierThisFrame(0.1) -- random vehicles (car scenarios / cars driving off from a parking spot etc.)
+	  SetParkedVehicleDensityMultiplierThisFrame(0.0) -- random parked vehicles (parked car scenarios)
+	  SetScenarioPedDensityMultiplierThisFrame(0.0, 0.0) -- npc/ai peds or scenario peds
 		
 		-- SetGarbageTrucks(false) -- Stop garbage trucks from randomly spawning
 		-- SetRandomBoats(false) -- Stop random boats from spawning in the water.
@@ -42,8 +42,8 @@ Citizen.CreateThread(function()
 		SetCreateRandomCopsOnScenarios(false) -- stop random cops (in a scenario) from spawning.
 
 		for _, model in next, suppressedModels do
-            SetVehicleModelIsSuppressed(GetHashKey(model), true)
-        end
+      SetVehicleModelIsSuppressed(GetHashKey(model), true)
+    end
 
 		local ped = PlayerPedId()
 		SetPedConfigFlag(ped, 35, false) -- CPED_CONFIG_FLAG_UseHelmet
@@ -55,10 +55,10 @@ Citizen.CreateThread(function()
 
 		-- Disable certain things 
 		BlockWeaponWheelThisFrame()
-        HideHudComponentThisFrame(19)
-        HideHudComponentThisFrame(20)
-        HideHudComponentThisFrame(17)
-        DisableControlAction(0, 37, true) -- Disable Tab
+    HideHudComponentThisFrame(19)
+    HideHudComponentThisFrame(20)
+    HideHudComponentThisFrame(17)
+    DisableControlAction(0, 37, true) -- Disable Tab
 
 		-- Disable district / vehicle name (bottom right)
 		HideHudComponentThisFrame(6)
@@ -68,21 +68,18 @@ Citizen.CreateThread(function()
 
 		-- Modify weapon damage
 		N_0x4757f00bc6323cfe(0xA2719263, 0.25) -- weapon_unarmed
-        N_0x4757f00bc6323cfe(0x678B81B1, 0.2) -- weapon_nightstick
-
-        N_0x4757f00bc6323cfe(0xDFE37640, 0.3) -- weapon_switchblade
-        N_0x4757f00bc6323cfe(0x99B507EA, 0.4) -- weapon_knife
-        N_0x4757f00bc6323cfe(0xD8DF3C3C, 0.3) -- weapon_knuckle
-        N_0x4757f00bc6323cfe(0xDD5DF8D9, 0.4) -- weapon_machete
-
-        N_0x4757f00bc6323cfe(0x8BB05FD7, 0.1) -- weapon_flashlight
-        N_0x4757f00bc6323cfe(0x958A4A8F , 0.28) -- weapon_bat
-        N_0x4757f00bc6323cfe(0xF9DCBF2D, 0.3) -- weapon_hatchet
-        N_0x4757f00bc6323cfe(0x4E875F73, 0.2) -- weapon_hammer
-        N_0x4757f00bc6323cfe(0x19044EE0, 0.2) -- weapon_wrench
-        N_0x4757f00bc6323cfe(0x84BD7BFD, 0.2) -- weapon_crowbar
-
-        N_0x4757f00bc6323cfe(1741783703, 0.2) -- VEHICLE_WEAPON_WATER_CANNON
+    N_0x4757f00bc6323cfe(0x678B81B1, 0.2) -- weapon_nightstick
+    N_0x4757f00bc6323cfe(0xDFE37640, 0.3) -- weapon_switchblade
+    N_0x4757f00bc6323cfe(0x99B507EA, 0.4) -- weapon_knife
+    N_0x4757f00bc6323cfe(0xD8DF3C3C, 0.3) -- weapon_knuckle
+    N_0x4757f00bc6323cfe(0xDD5DF8D9, 0.4) -- weapon_machete
+    N_0x4757f00bc6323cfe(0x8BB05FD7, 0.1) -- weapon_flashlight
+    N_0x4757f00bc6323cfe(0x958A4A8F , 0.28) -- weapon_bat
+    N_0x4757f00bc6323cfe(0xF9DCBF2D, 0.3) -- weapon_hatchet
+    N_0x4757f00bc6323cfe(0x4E875F73, 0.2) -- weapon_hammer
+    N_0x4757f00bc6323cfe(0x19044EE0, 0.2) -- weapon_wrench
+    N_0x4757f00bc6323cfe(0x84BD7BFD, 0.2) -- weapon_crowbar
+    N_0x4757f00bc6323cfe(1741783703, 0.2) -- VEHICLE_WEAPON_WATER_CANNON
 	end
 end)
 
@@ -90,10 +87,10 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(2500)
 
-        -- ==========================================
-        -- Idle Cams
-        -- ==========================================
-        InvalidateIdleCam()
+    -- ==========================================
+    -- Idle Cams
+    -- ==========================================
+    InvalidateIdleCam()
 		N_0x9e4cfff989258472() -- Disable the vehicle idle camera
 
         -- ==========================================

@@ -17,17 +17,17 @@ AddEventHandler('core-adapters:weather:requestSync', function()
     TriggerClientEvent('core-adapters:weather:updateTime', -1, baseTime, timeOffset, freezeTime)
 end)
 
-RegisterCommand('freezetime', function(source, args)
-    if source ~= 0 then
-        if IsPlayerAceAllowed(source, "fu_sync.cmd") then
+RegisterCommand('freezetime', function(src, args)
+    if src ~= 0 then
+        if IsPlayerAceAllowed(src, "fu_sync.cmd") then
             freezeTime = not freezeTime
             if freezeTime then
-                TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Time is now frozen.' })
+                TriggerClientEvent('mythic_notify:client:SendAlert', src, { type = 'inform', text = 'Time is now frozen.' })
             else
-                TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Time is no longer frozen.' })
+                TriggerClientEvent('mythic_notify:client:SendAlert', src, { type = 'inform', text = 'Time is no longer frozen.' })
             end
         else
-            TriggerClientEvent('chatMessage', source, '', {255, 255, 255}, '^8Error: ^1Not permitted.')
+            TriggerClientEvent('chatMessage', src, '', {255, 255, 255}, '^8Error: ^1Not permitted.')
         end
     else
         freezeTime = not freezeTime
@@ -39,17 +39,17 @@ RegisterCommand('freezetime', function(source, args)
     end
 end)
 
-RegisterCommand('freezeweather', function(source, args)
-    if source ~= 0 then
-        if IsPlayerAceAllowed(source, "fu_sync.cmd") then
+RegisterCommand('freezeweather', function(src, args)
+    if src ~= 0 then
+        if IsPlayerAceAllowed(src, "fu_sync.cmd") then
             DynamicWeather = not DynamicWeather
             if not DynamicWeather then
-                TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Dynamic weather is now disabled.' })
+                TriggerClientEvent('mythic_notify:client:SendAlert', src, { type = 'inform', text = 'Dynamic weather is now disabled.' })
             else
-                TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Dynamic weather is now enabled.' })
+                TriggerClientEvent('mythic_notify:client:SendAlert', src, { type = 'inform', text = 'Dynamic weather is now enabled.' })
             end
         else
-            TriggerClientEvent('chatMessage', source, '', {255, 255, 255}, '^8Error: ^1Not permitted.')
+            TriggerClientEvent('chatMessage', src, '', {255, 255, 255}, '^8Error: ^1Not permitted.')
         end
     else
         DynamicWeather = not DynamicWeather
@@ -61,8 +61,8 @@ RegisterCommand('freezeweather', function(source, args)
     end
 end)
 
-RegisterCommand('weather', function(source, args)
-    if source == 0 then
+RegisterCommand('weather', function(src, args)
+    if src == 0 then
         local validWeatherType = false
         if args[1] == nil then
             print("Invalid syntax, correct syntax is: /weather <weathertype> ")
@@ -83,10 +83,10 @@ RegisterCommand('weather', function(source, args)
             end
         end
     else
-        if IsPlayerAceAllowed(source, "fu_sync.cmd") then
+        if IsPlayerAceAllowed(src, "fu_sync.cmd") then
             local validWeatherType = false
             if args[1] == nil then
-                TriggerClientEvent('chatMessage', source, '', {255, 255, 255},
+                TriggerClientEvent('chatMessage', src, '', {255, 255, 255},
                     '^8Error: ^1Invalid syntax, use ^0/weather <weatherType> ^1instead!')
             else
                 for i, wtype in ipairs(AvailableWeatherTypes) do
@@ -95,17 +95,17 @@ RegisterCommand('weather', function(source, args)
                     end
                 end
                 if validWeatherType then
-                    TriggerClientEvent('mythic_notify:client:SendAlert', source, { type = 'inform', text = 'Changed weather to ' .. string.lower(args[1]) .. '.' })
+                    TriggerClientEvent('mythic_notify:client:SendAlert', src, { type = 'inform', text = 'Changed weather to ' .. string.lower(args[1]) .. '.' })
                     CurrentWeather = string.upper(args[1])
                     newWeatherTimer = 15
                     TriggerEvent('core-adapters:weather:requestSync')
                 else
-                    TriggerClientEvent('chatMessage', source, '', {255, 255, 255},
+                    TriggerClientEvent('chatMessage', src, '', {255, 255, 255},
                         '^8Error: ^1Invalid weather type, valid weather types are: ^0\nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ')
                 end
             end
         else
-            TriggerClientEvent('chatMessage', source, '', {255, 255, 255}, '^8Error: ^1Je hebt geen toegang tot die command.')
+            TriggerClientEvent('chatMessage', src, '', {255, 255, 255}, '^8Error: ^1Je hebt geen toegang tot die command.')
         end
     end
 end, false)
@@ -121,8 +121,8 @@ AddEventHandler('core-adapters:weather:toggleBlackout', function()
     TriggerEvent('core-adapters:weather:requestSync')
 end)
 
-RegisterCommand('blackout', function(source)
-    if IsPlayerAceAllowed(source, "fu_sync.cmd") or source == 0 then
+RegisterCommand('blackout', function(src)
+    if IsPlayerAceAllowed(src, "fu_sync.cmd") or src == 0 then
         TriggerEvent('core-adapters:weather:toggleBlackout')
     end
 end)
@@ -135,8 +135,8 @@ function ShiftToHour(hour)
     timeOffset = timeOffset - ((((baseTime + timeOffset) / 60) % 24) - hour) * 60
 end
 
-RegisterCommand('time', function(source, args, rawCommand)
-    if source == 0 then
+RegisterCommand('time', function(src, args, rawCommand)
+    if src == 0 then
         if tonumber(args[1]) ~= nil and tonumber(args[2]) ~= nil then
             local argh = tonumber(args[1])
             local argm = tonumber(args[2])
@@ -155,8 +155,8 @@ RegisterCommand('time', function(source, args, rawCommand)
         else
             print("Invalid syntax, correct syntax is: time <hour> <minute>!")
         end
-    elseif source ~= 0 then
-        if IsPlayerAceAllowed(source, "fu_sync.cmd") then
+    elseif src ~= 0 then
+        if IsPlayerAceAllowed(src, "fu_sync.cmd") then
             if tonumber(args[1]) ~= nil and tonumber(args[2]) ~= nil then
                 local argh = tonumber(args[1])
                 local argm = tonumber(args[2])
@@ -181,10 +181,10 @@ RegisterCommand('time', function(source, args, rawCommand)
                 TriggerClientEvent('mythic_notify:client:SendAlert', -1, { type = 'inform', text = 'Time was changed to ' .. newtime .. '.' })
                 TriggerEvent('core-adapters:weather:requestSync')
             else
-                TriggerClientEvent('chatMessage', source, '', {255, 255, 255}, '^8Error: ^1Invalid syntax. Use ^0/time <hour> <minute> ^1instead!')
+                TriggerClientEvent('chatMessage', src, '', {255, 255, 255}, '^8Error: ^1Invalid syntax. Use ^0/time <hour> <minute> ^1instead!')
             end
         else
-            TriggerClientEvent('chatMessage', source, '', {255, 255, 255}, '^8Error: ^1Je hebt geen toegang tot die command.')
+            TriggerClientEvent('chatMessage', src, '', {255, 255, 255}, '^8Error: ^1Je hebt geen toegang tot die command.')
         end
     end
 end)

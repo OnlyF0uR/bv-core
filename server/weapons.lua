@@ -15,8 +15,8 @@ Core.Functions.CreateCallback('core-weapons:server:GetConfig', function(_, cb)
     cb(Config.WeaponRepairPoints)
 end)
 
-Core.Functions.CreateCallback('weapon:server:GetWeaponAmmo', function(source, cb, WeaponData)
-    local Player = Core.Functions.GetPlayer(source)
+Core.Functions.CreateCallback('weapon:server:GetWeaponAmmo', function(src, cb, WeaponData)
+    local Player = Core.Functions.GetPlayer(src)
     local retval = 0
     if WeaponData then
         if Player then
@@ -29,8 +29,7 @@ Core.Functions.CreateCallback('weapon:server:GetWeaponAmmo', function(source, cb
     cb(retval, WeaponData.name)
 end)
 
-Core.Functions.CreateCallback('core-weapons:server:RepairWeapon', function(source, cb, RepairPoint, data)
-    local src = source
+Core.Functions.CreateCallback('core-weapons:server:RepairWeapon', function(src, cb, RepairPoint, data)
     local Player = Core.Functions.GetPlayer(src)
     local minute = 60 * 1000
     local Timeout = math.random(5 * minute, 10 * minute)
@@ -98,13 +97,13 @@ Core.Functions.CreateCallback('core-weapons:server:RepairWeapon', function(sourc
     cb(true)
 end)
 
-Core.Functions.CreateCallback('prison:server:checkThrowable', function(source, cb, weapon)
-    local Player = Core.Functions.GetPlayer(source)
+Core.Functions.CreateCallback('prison:server:checkThrowable', function(src, cb, weapon)
+    local Player = Core.Functions.GetPlayer(src)
     if not Player then return cb(false) end
     local throwable = false
     for _, v in pairs(Config.Throwables) do
         if Core.Shared.Weapons[weapon].name == 'weapon_' .. v then
-            if not exports['qb-inventory']:RemoveItem(source, 'weapon_' .. v, 1, false, 'prison:server:checkThrowable') then return cb(false) end
+            if not exports['qb-inventory']:RemoveItem(src, 'weapon_' .. v, 1, false, 'prison:server:checkThrowable') then return cb(false) end
             throwable = true
             break
         end
@@ -187,23 +186,24 @@ RegisterNetEvent('core-weapons:server:UpdateWeaponQuality', function(data, Repea
 end)
 
 RegisterNetEvent('core-weapons:server:removeWeaponAmmoItem', function(item)
-    local Player = Core.Functions.GetPlayer(source)
+    local src = source
+    local Player = Core.Functions.GetPlayer(src)
     if not Player or type(item) ~= 'table' or not item.name or not item.slot then return end
-    exports['qb-inventory']:RemoveItem(source, item.name, 1, item.slot, 'core-weapons:server:removeWeaponAmmoItem')
+    exports['qb-inventory']:RemoveItem(src, item.name, 1, item.slot, 'core-weapons:server:removeWeaponAmmoItem')
 end)
 
 -- Commands
 
-Core.Commands.Add('repairweapon', 'Repair Weapon (God Only)', { { name = 'hp', help = Lang:t('info.hp_of_weapon') } }, true, function(source, args)
-    TriggerClientEvent('core-weapons:client:SetWeaponQuality', source, tonumber(args[1]))
+Core.Commands.Add('repairweapon', 'Repair Weapon (God Only)', { { name = 'hp', help = Lang:t('info.hp_of_weapon') } }, true, function(src, args)
+    TriggerClientEvent('core-weapons:client:SetWeaponQuality', src, tonumber(args[1]))
 end, 'god')
 
 -- Items
 
 -- AMMO
 for ammoItem, properties in pairs(Config.AmmoTypes) do
-    Core.Functions.CreateUseableItem(ammoItem, function(source, item)
-        TriggerClientEvent('core-weapons:client:AddAmmo', source, properties.ammoType, properties.amount, item)
+    Core.Functions.CreateUseableItem(ammoItem, function(src, item)
+        TriggerClientEvent('core-weapons:client:AddAmmo', src, properties.ammoType, properties.amount, item)
     end)
 end
 
@@ -223,15 +223,15 @@ local function IsMK2Weapon(weaponHash)
     return string.find(weaponName, 'mk2') ~= nil
 end
 
-local function EquipWeaponTint(source, tintIndex, item, isMK2)
-    local Player = Core.Functions.GetPlayer(source)
+local function EquipWeaponTint(src, tintIndex, item, isMK2)
+    local Player = Core.Functions.GetPlayer(src)
     if not Player then return end
 
-    local ped = GetPlayerPed(source)
+    local ped = GetPlayerPed(src)
     local selectedWeaponHash = GetSelectedPedWeapon(ped)
 
     if selectedWeaponHash == `WEAPON_UNARMED` then
-        TriggerClientEvent('Core:Notify', source, 'You have no weapon selected.', 'error')
+        TriggerClientEvent('Core:Notify', src, 'You have no weapon selected.', 'error')
         return
     end
 
@@ -239,7 +239,7 @@ local function EquipWeaponTint(source, tintIndex, item, isMK2)
     if not weaponName then return end
 
     if isMK2 and not IsMK2Weapon(selectedWeaponHash) then
-        TriggerClientEvent('Core:Notify', source, 'This tint is only for MK2 weapons', 'error')
+        TriggerClientEvent('Core:Notify', src, 'This tint is only for MK2 weapons', 'error')
         return
     end
 
@@ -247,27 +247,27 @@ local function EquipWeaponTint(source, tintIndex, item, isMK2)
     if not weaponSlot then return end
 
     if weaponSlot.info.tint == tintIndex then
-        TriggerClientEvent('Core:Notify', source, 'This tint is already applied to your weapon.', 'error')
+        TriggerClientEvent('Core:Notify', src, 'This tint is already applied to your weapon.', 'error')
         return
     end
 
     weaponSlot.info.tint = tintIndex
     Player.PlayerData.items[weaponSlotIndex] = weaponSlot
     Player.Functions.SetInventory(Player.PlayerData.items, true)
-    exports['qb-inventory']:RemoveItem(source, item, 1, false, 'qb-weapon:EquipWeaponTint')
-    TriggerClientEvent('qb-inventory:client:ItemBox', source, Core.Shared.Items[item], 'remove')
-    TriggerClientEvent('core-weapons:client:EquipTint', source, selectedWeaponHash, tintIndex)
+    exports['qb-inventory']:RemoveItem(src, item, 1, false, 'qb-weapon:EquipWeaponTint')
+    TriggerClientEvent('qb-inventory:client:ItemBox', src, Core.Shared.Items[item], 'remove')
+    TriggerClientEvent('core-weapons:client:EquipTint', src, selectedWeaponHash, tintIndex)
 end
 
 for i = 0, 7 do
-    Core.Functions.CreateUseableItem('weapontint_' .. i, function(source, item)
-        EquipWeaponTint(source, i, item.name, false)
+    Core.Functions.CreateUseableItem('weapontint_' .. i, function(src, item)
+        EquipWeaponTint(src, i, item.name, false)
     end)
 end
 
 for i = 0, 32 do
-    Core.Functions.CreateUseableItem('weapontint_mk2_' .. i, function(source, item)
-        EquipWeaponTint(source, i, item.name, true)
+    Core.Functions.CreateUseableItem('weapontint_mk2_' .. i, function(src, item)
+        EquipWeaponTint(src, i, item.name, true)
     end)
 end
 
@@ -326,13 +326,12 @@ local function EquipWeaponAttachment(src, item)
 end
 
 for attachmentItem in pairs(WeaponAttachments) do
-    Core.Functions.CreateUseableItem(attachmentItem, function(source, item)
-        EquipWeaponAttachment(source, item.name)
+    Core.Functions.CreateUseableItem(attachmentItem, function(src, item)
+        EquipWeaponAttachment(src, item.name)
     end)
 end
 
-Core.Functions.CreateCallback('core-weapons:server:RemoveAttachment', function(source, cb, AttachmentData, WeaponData)
-    local src = source
+Core.Functions.CreateCallback('core-weapons:server:RemoveAttachment', function(src, cb, AttachmentData, WeaponData)
     local Player = Core.Functions.GetPlayer(src)
     local Inventory = Player.PlayerData.items
     local allAttachments = WeaponAttachments
