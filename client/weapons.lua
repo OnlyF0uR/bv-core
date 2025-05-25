@@ -6,18 +6,18 @@ local CurrentWeaponData, CanShoot, MultiplierAmount, currentWeapon = {}, true, 0
 
 AddEventHandler('Core:Client:OnPlayerLoaded', function()
     PlayerData = Core.Functions.GetPlayerData()
-    Core.Functions.TriggerCallback('core-weapons:server:GetConfig', function(RepairPoints)
+    Core.Functions.TriggerCallback('core-weapons:server:GetShared.Weapons', function(RepairPoints)
         for k, data in pairs(RepairPoints) do
-            Config.WeaponRepairPoints[k].IsRepairing = data.IsRepairing
-            Config.WeaponRepairPoints[k].RepairingData = data.RepairingData
+            Shared.Weapons.WeaponRepairPoints[k].IsRepairing = data.IsRepairing
+            Shared.Weapons.WeaponRepairPoints[k].RepairingData = data.RepairingData
         end
     end)
 end)
 
 RegisterNetEvent('Core:Client:OnPlayerUnload', function()
-    for k in pairs(Config.WeaponRepairPoints) do
-        Config.WeaponRepairPoints[k].IsRepairing = false
-        Config.WeaponRepairPoints[k].RepairingData = {}
+    for k in pairs(Shared.Weapons.WeaponRepairPoints) do
+        Shared.Weapons.WeaponRepairPoints[k].IsRepairing = false
+        Shared.Weapons.WeaponRepairPoints[k].RepairingData = {}
     end
 end)
 
@@ -41,8 +41,8 @@ end
 -- Events
 
 RegisterNetEvent('core-weapons:client:SyncRepairShops', function(NewData, key)
-    Config.WeaponRepairPoints[key].IsRepairing = NewData.IsRepairing
-    Config.WeaponRepairPoints[key].RepairingData = NewData.RepairingData
+    Shared.Weapons.WeaponRepairPoints[key].IsRepairing = NewData.IsRepairing
+    Shared.Weapons.WeaponRepairPoints[key].RepairingData = NewData.RepairingData
 end)
 
 RegisterNetEvent('core-weapons:client:EquipTint', function(weapon, tint)
@@ -92,7 +92,7 @@ RegisterNetEvent('core-weapons:client:AddAmmo', function(ammoType, amount, itemD
         return
     end
 
-    Core.Functions.Progressbar('taking_bullets', Lang:t('info.loading_bullets'), Config.ReloadTime, false, true, {
+    Core.Functions.Progressbar('taking_bullets', Lang:t('info.loading_bullets'), Shared.Weapons.ReloadTime, false, true, {
         disableMovement = false,
         disableCarMovement = false,
         disableMouse = false,
@@ -233,7 +233,7 @@ CreateThread(function()
             local inRange = false
             local ped = PlayerPedId()
             local pos = GetEntityCoords(ped)
-            for k, data in pairs(Config.WeaponRepairPoints) do
+            for k, data in pairs(Shared.Weapons.WeaponRepairPoints) do
                 local distance = #(pos - data.coords)
                 if distance < 10 then
                     inRange = true
@@ -253,7 +253,7 @@ CreateThread(function()
                                 if not data.RepairingData.Ready then
                                     local WeaponData = Core.Shared.Weapons[GetHashKey(CurrentWeaponData.name)]
                                     local WeaponClass = (Core.Shared.SplitStr(WeaponData.ammotype, '_')[2]):lower()
-                                    DrawText3Ds(data.coords.x, data.coords.y, data.coords.z, Lang:t('info.repair_weapon_price', { value = Config.WeaponRepairCosts[WeaponClass] }))
+                                    DrawText3Ds(data.coords.x, data.coords.y, data.coords.z, Lang:t('info.repair_weapon_price', { value = Shared.Weapons.WeaponRepairCosts[WeaponClass] }))
                                     if IsControlJustPressed(0, 38) then
                                         Core.Functions.TriggerCallback('core-weapons:server:RepairWeapon', function(HasMoney)
                                             if HasMoney then
@@ -540,8 +540,8 @@ local function checkWeapon(newWeap)
 end
 
 local function isWeaponHolsterable(weap)
-  for i = 1, #Config.WeapDraw.weapons do
-      if joaat(Config.WeapDraw.weapons[i]) == weap then
+  for i = 1, #Shared.Weapons.WeapDraw.weapons do
+      if joaat(Shared.Weapons.WeapDraw.weapons[i]) == weap then
           return true
       end
   end
@@ -579,8 +579,8 @@ RegisterNetEvent('core-weapons:client:DrawWeapon', function()
 
               local holsterVariant = GetPedDrawableVariation(ped, 8)
               wearingHolster = false
-              for i = 1, #Config.WeapDraw.variants, 1 do
-                  if holsterVariant == Config.WeapDraw.variants[i] then
+              for i = 1, #Shared.Weapons.WeapDraw.variants, 1 do
+                  if holsterVariant == Shared.Weapons.WeapDraw.variants[i] then
                       wearingHolster = true
                   end
               end

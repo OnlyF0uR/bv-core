@@ -1,4 +1,4 @@
-Shared.PostalCodes {
+Shared.PostalCodes = {
   Blip = {
     Text = 'Postal code route %s',
     Sprite = 8,

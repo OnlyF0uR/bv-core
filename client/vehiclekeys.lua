@@ -257,7 +257,7 @@ RegisterNetEvent('Core:Client:VehicleInfo', function(data)
     end
 end)
 
-RegisterNetEvent('qb-weapons:client:DrawWeapon', function()
+RegisterNetEvent('core-weapons:client:DrawWeapon', function()
     Wait(2000)
     robKeyLoop()
 end)

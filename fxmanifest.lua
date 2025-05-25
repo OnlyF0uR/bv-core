@@ -5,7 +5,7 @@ author 'Kakarot (QB-Core), OnlyF0uR'
 description 'Core resource for the framework, adapted from QB-Core'
 version '1.0.0'
 
-local postalFile = "client/new-postals.json"
+local postalFile = "client/postals.json"
 
 shared_scripts {
     'config.lua',
