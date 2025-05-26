@@ -1,24 +1,26 @@
 local Translations = {
     error = {
-        not_online = 'Speler niet online',
-        wrong_format = 'Onjuiste opmaak',
-        missing_args = 'Niet elk argument is ingevuld (x, y, z)',
-        missing_args2 = 'Alle argumenten moeten worden ingevuld!',
-        no_access = 'Geen toegang tot dit commando',
-        company_too_poor = 'Je werkgever is arm',
-        item_not_exist = 'Item bestaat niet',
-        too_heavy = 'Broekzakken zitten vol',
-        location_not_exist = 'Locatie bestaat niet',
-        duplicate_license = 'Dubbele Rockstar-licentie gevonden',
-        no_valid_license  = 'Geen geldige Rockstar-licentie gevonden',
-        not_whitelisted = 'U bent niet whitelisted voor deze server',
-        server_already_open = 'De server is al open',
-        server_already_closed = 'De server is al gesloten',
-        no_permission = 'Je hebt geen permissie voor dit..',
-        no_waypoint = 'Geen bestemming geselecteerd',
-        tp_error = 'Er is een foutje begaan tijdens het teleporteren',
-        connecting_database_error = 'Er is een databasefout opgetreden tijdens het maken van een verbinding met de server. (Is de SQL-server ingeschakeld?)',
-        connecting_database_timeout = 'Er is een time-out opgetreden voor verbinding met database. (Is de SQL-server ingeschakeld?)',
+        not_online                  = 'Speler niet online',
+        wrong_format                = 'Onjuiste opmaak',
+        missing_args                = 'Niet elk argument is ingevuld (x, y, z)',
+        missing_args2               = 'Alle argumenten moeten worden ingevuld!',
+        no_access                   = 'Geen toegang tot dit commando',
+        company_too_poor            = 'Je werkgever is arm',
+        item_not_exist              = 'Item bestaat niet',
+        too_heavy                   = 'Broekzakken zitten vol',
+        location_not_exist          = 'Locatie bestaat niet',
+        duplicate_license           = 'Dubbele Rockstar-licentie gevonden',
+        no_valid_license            = 'Geen geldige Rockstar-licentie gevonden',
+        not_whitelisted             = 'U bent niet whitelisted voor deze server',
+        server_already_open         = 'De server is al open',
+        server_already_closed       = 'De server is al gesloten',
+        no_permission               = 'Je hebt geen permissie voor dit..',
+        no_waypoint                 = 'Geen bestemming geselecteerd',
+        tp_error                    = 'Er is een foutje begaan tijdens het teleporteren',
+        connecting_database_error   =
+        'Er is een databasefout opgetreden tijdens het maken van een verbinding met de server. (Is de SQL-server ingeschakeld?)',
+        connecting_database_timeout =
+        'Er is een time-out opgetreden voor verbinding met database. (Is de SQL-server ingeschakeld?)',
     },
     success = {
         server_opened = 'De server is geopend',
@@ -41,9 +43,9 @@ local Translations = {
         tp = {
             help = 'Teleport naar speler of coördinaten (Alleen Admin)',
             params = {
-                x = { name = 'id/x', help = 'ID van speler of X-positie'},
-                y = { name = 'y', help = 'Y positie'},
-                z = { name = 'z', help = 'Z positie'},
+                x = { name = 'id/x', help = 'ID van speler of X-positie' },
+                y = { name = 'y', help = 'Y positie' },
+                z = { name = 'z', help = 'Z positie' },
             },
         },
         tpm = { help = 'Teleport naar bestemming (Alleen Admin)' },
@@ -118,6 +120,70 @@ local Translations = {
             },
         },
     },
+    weathersync = {
+        weather = {
+            now_frozen = 'Weer is bevroren.',
+            now_unfrozen = 'Weer is niet langer bevroren.',
+            invalid_syntax = 'Ongeldige commando, correcte commando is: /weather <weertype> ',
+            invalid_syntaxc = 'Ongeldige commando, gebruik /weather <weertype> !',
+            updated = 'Het weer is bijgewerkt.',
+            invalid =
+            'Ongeldig weertype, geldige weertypes zijn: \nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ',
+            invalidc =
+            'Ongeldig weertype, geldige weertypes zijn: \nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ',
+            willchangeto = 'Het weer verandert in: %{value}.',
+            accessdenied = 'Toegang voor commando /weather geweigerd.',
+        },
+        dynamic_weather = {
+            disabled = 'Dynamische weersveranderingen zijn nu uitgeschakeld.',
+            enabled = 'Dynamische weersveranderingen zijn nu ingeschakeld.',
+        },
+        time = {
+            frozenc = 'De tijd is bevroren.',
+            unfrozenc = 'De tijd is niet langer bevroren.',
+            now_frozen = 'De tijd is bevroren.',
+            now_unfrozen = 'De tijd is niet langer bevroren.',
+            morning = 'Tijd ingesteld op ochtend.',
+            noon = 'Tijd ingesteld op middag.',
+            evening = 'Tijd ingesteld op avond.',
+            night = 'Tijd ingesteld op nacht.',
+            change = 'De tijd is veranderd in %{value}:%{value2}.',
+            changec = 'De tijd is veranderd in: %{value}!',
+            invalid = 'Ongeldige commando, correcte commando is: time <hour> <minute> !',
+            invalidc = 'Ongeldige commando. gebruik /time <uur> <minuut> !',
+            access = 'Toegang voor commando /time geweigerd.',
+        },
+        blackout = {
+            enabled = 'Black-out is ingeschakeld.',
+            enabledc = 'Black-out is ingeschakeld.',
+            disabled = 'Black-out is uitgeschakeld.',
+            disabledc = 'Black-out is uitgeschakeld.',
+        },
+        help = {
+            weathercommand = 'Verander het weer.',
+            weathertype = 'weertype',
+            availableweather =
+            'Beschikbare typen: extrasunny, clear, neutral, smog, foggy, overcast, clouds, clearing, rain, thunder, snow, blizzard, snowlight, xmas & halloween',
+            timecommand = 'Verander de tijd.',
+            timehname = 'uren',
+            timemname = 'minuten',
+            timeh = 'Een getal tussen 0 - 23',
+            timem = 'Een getal tussen 0 - 59',
+            freezecommand = 'Tijd bevriezen / ontdooien.',
+            freezeweathercommand = 'Dynamische weersveranderingen in-/uitschakelen.',
+            morningcommand = 'Zet de tijd op 09:00',
+            nooncommand = 'Zet de tijd op 12:00',
+            eveningcommand = 'Zet de tijd op 18:00',
+            nightcommand = 'Zet de tijd op 23:00',
+            blackoutcommand = 'Schakel de black-outmodus.',
+        },
+    },
+    carlocks = {
+        locked = 'Voertuig is nu gesloten.',
+        unlocked = 'Voertuig is nu open.',
+        lockpicked = 'Voertuig successvol gelockpickt.',
+        lockpick_failed = 'Lockpickpoging gefaald, probeer opnieuw.',
+    }
 }
 
 if GetConvar('qb_locale', 'en') == 'nl' then
@@ -127,4 +193,3 @@ if GetConvar('qb_locale', 'en') == 'nl' then
         fallbackLang = Lang,
     })
 end
-

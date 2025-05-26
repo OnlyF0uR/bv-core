@@ -11,7 +11,8 @@ AddEventHandler('playerDropped', function(reason)
     local src = source
     if not Core.Players[src] then return end
     local Player = Core.Players[src]
-    TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Dropped', 'red', '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..' .. '\n **Reason:** ' .. reason)
+    TriggerEvent('bv-log:server:CreateLog', 'joinleave', 'Dropped', 'red',
+        '**' .. GetPlayerName(src) .. '** (' .. Player.PlayerData.license .. ') left..' .. '\n **Reason:** ' .. reason)
     TriggerEvent('Core:Server:PlayerDropped', Player)
     Player.Functions.Save()
     Core.Player_Buckets[Player.PlayerData.license] = nil
@@ -19,7 +20,7 @@ AddEventHandler('playerDropped', function(reason)
 end)
 
 AddEventHandler("onResourceStop", function(resName)
-    for i,v in pairs(Core.UsableItems) do
+    for i, v in pairs(Core.UsableItems) do
         if v.resource == resName then
             Core.UsableItems[i] = nil
         end
@@ -36,7 +37,9 @@ if readyFunction ~= nil then
         local DatabaseInfo = Core.Functions.GetDatabaseInfo()
         if not DatabaseInfo or not DatabaseInfo.exists then return end
 
-        local result = MySQL.query.await('SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = "bans";', {DatabaseInfo.database})
+        local result = MySQL.query.await(
+            'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = "bans";',
+            { DatabaseInfo.database })
         if result and result[1] then
             bansTableExists = true
         end
@@ -227,23 +230,29 @@ end)
 
 -- This event is exploitable and should not be used. It has been deprecated, and will be removed soon.
 RegisterNetEvent('Core:Server:UseItem', function(item)
-    print(string.format('%s triggered Core:Server:UseItem by ID %s with the following data. This event is deprecated due to exploitation, and will be removed soon. Check qb-inventory for the right use on this event.', GetInvokingResource(), source))
+    print(string.format(
+        '%s triggered Core:Server:UseItem by ID %s with the following data. This event is deprecated due to exploitation, and will be removed soon. Check bv-inventory for the right use on this event.',
+        GetInvokingResource(), source))
     Core.Debug(item)
 end)
 
 -- This event is exploitable and should not be used. It has been deprecated, and will be removed soon. function(itemName, amount, slot)
 RegisterNetEvent('Core:Server:RemoveItem', function(itemName, amount)
     local src = source
-    print(string.format('%s triggered Core:Server:RemoveItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.', GetInvokingResource(), src, amount, itemName))
+    print(string.format(
+        '%s triggered Core:Server:RemoveItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.',
+        GetInvokingResource(), src, amount, itemName))
 end)
 
 -- This event is exploitable and should not be used. It has been deprecated, and will be removed soon. function(itemName, amount, slot, info)
 RegisterNetEvent('Core:Server:AddItem', function(itemName, amount)
     local src = source
-    print(string.format('%s triggered Core:Server:AddItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.', GetInvokingResource(), src, amount, itemName))
+    print(string.format(
+        '%s triggered Core:Server:AddItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.',
+        GetInvokingResource(), src, amount, itemName))
 end)
 
--- Non-Chat Command Calling (ex: qb-adminmenu)
+-- Non-Chat Command Calling (ex: bv-adminmenu)
 
 RegisterNetEvent('Core:CallCommand', function(command, args)
     local src = source
@@ -281,5 +290,5 @@ Core.Functions.CreateCallback('Core:Server:CreateVehicle', function(source, cb, 
 end)
 
 --Core.Functions.CreateCallback('Core:HasItem', function(source, cb, items, amount)
--- https://github.com/Core-framework/qb-inventory/blob/e4ef156d93dd1727234d388c3f25110c350b3bcf/server/main.lua#L2066
+-- https://github.com/Core-framework/bv-inventory/blob/e4ef156d93dd1727234d388c3f25110c350b3bcf/server/main.lua#L2066
 --end)

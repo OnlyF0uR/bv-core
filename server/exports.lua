@@ -320,17 +320,19 @@ exports('GetCoreVersion', GetCoreVersion)
 
 local function ExploitBan(playerId, origin)
     local name = GetPlayerName(playerId)
-    MySQL.insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)', {
-        name,
-        Core.Functions.GetIdentifier(playerId, 'license'),
-        Core.Functions.GetIdentifier(playerId, 'discord'),
-        Core.Functions.GetIdentifier(playerId, 'ip'),
-        origin,
-        2147483647,
-        'Anti Cheat'
-    })
+    MySQL.insert('INSERT INTO bans (name, license, discord, ip, reason, expire, bannedby) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        {
+            name,
+            Core.Functions.GetIdentifier(playerId, 'license'),
+            Core.Functions.GetIdentifier(playerId, 'discord'),
+            Core.Functions.GetIdentifier(playerId, 'ip'),
+            origin,
+            2147483647,
+            'Anti Cheat'
+        })
     DropPlayer(playerId, Lang:t('info.exploit_banned', { discord = Core.Config.Server.Discord }))
-    TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'red', name .. ' has been banned for exploiting ' .. origin, true)
+    TriggerEvent('bv-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'red',
+        name .. ' has been banned for exploiting ' .. origin, true)
 end
 
 exports('ExploitBan', ExploitBan)

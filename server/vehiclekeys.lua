@@ -40,8 +40,8 @@ RegisterNetEvent('core:server:breakLockpick', function(itemName)
     local Player = Core.Functions.GetPlayer(src)
     if not Player then return end
     if not (itemName == 'lockpick' or itemName == 'advancedlockpick') then return end
-    if exports['qb-inventory']:RemoveItem(src, itemName, 1, false, 'core:server:breakLockpick') then
-        TriggerClientEvent('qb-inventory:client:ItemBox', src, Core.Shared.Items[itemName], 'remove')
+    if exports['bv-inventory']:RemoveItem(src, itemName, 1, false, 'core:server:breakLockpick') then
+        TriggerClientEvent('bv-inventory:client:ItemBox', src, Core.Shared.Items[itemName], 'remove')
     end
 end)
 
@@ -141,12 +141,15 @@ end
 
 exports('HasKeys', HasKeys)
 
-Core.Commands.Add('givekeys', Lang:t('addcom.givekeys'), { { name = Lang:t('addcom.givekeys_id'), help = Lang:t('addcom.givekeys_id_help') } }, false, function(source, args)
+Core.Commands.Add('givekeys', Lang:t('addcom.givekeys'),
+    { { name = Lang:t('addcom.givekeys_id'), help = Lang:t('addcom.givekeys_id_help') } }, false, function(source, args)
     local src = source
     TriggerClientEvent('core:client:GiveKeys', src, tonumber(args[1]))
 end)
 
-Core.Commands.Add('addkeys', Lang:t('addcom.addkeys'), { { name = Lang:t('addcom.addkeys_id'), help = Lang:t('addcom.addkeys_id_help') }, { name = Lang:t('addcom.addkeys_plate'), help = Lang:t('addcom.addkeys_plate_help') } }, true, function(source, args)
+Core.Commands.Add('addkeys', Lang:t('addcom.addkeys'),
+    { { name = Lang:t('addcom.addkeys_id'), help = Lang:t('addcom.addkeys_id_help') }, { name = Lang:t('addcom.addkeys_plate'), help = Lang:t('addcom.addkeys_plate_help') } },
+    true, function(source, args)
     local src = source
     if not args[1] or not args[2] then
         TriggerClientEvent('Core:Notify', src, Lang:t('notify.fpid'))
@@ -155,7 +158,9 @@ Core.Commands.Add('addkeys', Lang:t('addcom.addkeys'), { { name = Lang:t('addcom
     GiveKeys(tonumber(args[1]), args[2])
 end, 'admin')
 
-Core.Commands.Add('removekeys', Lang:t('addcom.rkeys'), { { name = Lang:t('addcom.rkeys_id'), help = Lang:t('addcom.rkeys_id_help') }, { name = Lang:t('addcom.rkeys_plate'), help = Lang:t('addcom.rkeys_plate_help') } }, true, function(source, args)
+Core.Commands.Add('removekeys', Lang:t('addcom.rkeys'),
+    { { name = Lang:t('addcom.rkeys_id'), help = Lang:t('addcom.rkeys_id_help') }, { name = Lang:t('addcom.rkeys_plate'), help = Lang:t('addcom.rkeys_plate_help') } },
+    true, function(source, args)
     local src = source
     if not args[1] or not args[2] then
         TriggerClientEvent('Core:Notify', src, Lang:t('notify.fpid'))

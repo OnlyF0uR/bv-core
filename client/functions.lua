@@ -45,7 +45,7 @@ function Core.Functions.GetCoords(entity)
 end
 
 function Core.Functions.HasItem(items, amount)
-    return exports['qb-inventory']:HasItem(items, amount)
+    return exports['bv-inventory']:HasItem(items, amount)
 end
 
 ---Returns the full character name
@@ -167,12 +167,19 @@ function Core.Functions.IsWearingGloves()
 end
 
 function Core.Functions.Notify(text, type, length, style)
-    if GetResourceState('mythic_notify') ~= 'started' then error('mythic_notify needs to be started in order for Core.Functions.Notify to work') end
+    if GetResourceState('mythic_notify') ~= 'started' then
+        error(
+            'mythic_notify needs to be started in order for Core.Functions.Notify to work')
+    end
     exports['mythic_notify']:SendAlert(type, text, length, style)
 end
 
-function Core.Functions.Progressbar(name, label, duration, useWhileDead, canCancel, disableControls, animation, prop, onFinish, onCancel)
-    if GetResourceState('mythic_progbar') ~= 'started' then error('mythic_progbar needs to be started in order for Core.Functions.Progressbar to work') end
+function Core.Functions.Progressbar(name, label, duration, useWhileDead, canCancel, disableControls, animation, prop,
+                                    onFinish, onCancel)
+    if GetResourceState('mythic_progbar') ~= 'started' then
+        error(
+            'mythic_progbar needs to be started in order for Core.Functions.Progressbar to work')
+    end
     exports['progressbar']:Progress({
         name = name:lower(),
         duration = duration,
@@ -444,7 +451,7 @@ function Core.Functions.GetVehicleProperties(vehicle)
             xenonColor = GetVehicleXenonLightsColor(vehicle)
         end
 
-        
+
         local class
         if GetResourceState('bv-cars') ~= 'missing' then
             class = exports['bv-cars']:GetCarClass(vehicle)
@@ -937,7 +944,8 @@ function Core.Functions.StartParticleAtCoord(dict, ptName, looped, coords, rot, 
     SetPtfxAssetNextCall(dict)
     local particleHandle
     if looped then
-        particleHandle = StartParticleFxLoopedAtCoord(ptName, coords.x, coords.y, coords.z, rot.x, rot.y, rot.z, scale or 1.0)
+        particleHandle = StartParticleFxLoopedAtCoord(ptName, coords.x, coords.y, coords.z, rot.x, rot.y, rot.z,
+            scale or 1.0)
         if color then
             SetParticleFxLoopedColour(particleHandle, color.r, color.g, color.b, false)
         end
@@ -956,7 +964,8 @@ function Core.Functions.StartParticleAtCoord(dict, ptName, looped, coords, rot, 
     return particleHandle
 end
 
-function Core.Functions.StartParticleOnEntity(dict, ptName, looped, entity, bone, offset, rot, scale, alpha, color, evolution, duration)
+function Core.Functions.StartParticleOnEntity(dict, ptName, looped, entity, bone, offset, rot, scale, alpha, color,
+                                              evolution, duration)
     Core.Functions.LoadParticleDictionary(dict)
     UseParticleFxAssetNextCall(dict)
     local particleHandle, boneID
@@ -967,9 +976,11 @@ function Core.Functions.StartParticleOnEntity(dict, ptName, looped, entity, bone
     end
     if looped then
         if bone then
-            particleHandle = StartParticleFxLoopedOnEntityBone(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot.y, rot.z, boneID, scale)
+            particleHandle = StartParticleFxLoopedOnEntityBone(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot
+                .y, rot.z, boneID, scale)
         else
-            particleHandle = StartParticleFxLoopedOnEntity(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot.y, rot.z, scale)
+            particleHandle = StartParticleFxLoopedOnEntity(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot.y,
+                rot.z, scale)
         end
         if evolution then
             SetParticleFxLoopedEvolution(particleHandle, evolution.name, evolution.amount, false)
@@ -988,7 +999,8 @@ function Core.Functions.StartParticleOnEntity(dict, ptName, looped, entity, bone
             SetParticleFxNonLoopedColour(color.r, color.g, color.b)
         end
         if bone then
-            StartParticleFxNonLoopedOnPedBone(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot.y, rot.z, boneID, scale)
+            StartParticleFxNonLoopedOnPedBone(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot.y, rot.z, boneID,
+                scale)
         else
             StartParticleFxNonLoopedOnEntity(ptName, entity, offset.x, offset.y, offset.z, rot.x, rot.y, rot.z, scale)
         end
@@ -1052,7 +1064,8 @@ end
 
 function Core.Functions.GetGroundHash(entity)
     local coords = GetEntityCoords(entity)
-    local num = StartShapeTestCapsule(coords.x, coords.y, coords.z + 4, coords.x, coords.y, coords.z - 2.0, 1, 1, entity, 7)
+    local num = StartShapeTestCapsule(coords.x, coords.y, coords.z + 4, coords.x, coords.y, coords.z - 2.0, 1, 1, entity,
+        7)
     local retval, success, endCoords, surfaceNormal, materialHash, entityHit = GetShapeTestResultEx(num)
     return materialHash, entityHit, surfaceNormal, endCoords, success, retval
 end

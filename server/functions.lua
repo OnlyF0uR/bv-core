@@ -395,20 +395,22 @@ function Core.Functions.CreateVehicle(source, model, vehtype, coords, warp)
 end
 
 function PaycheckInterval()
-    if not next(Core.Players) then 
+    if not next(Core.Players) then
         SetTimeout(Core.Config.Money.PayCheckTimeOut * (60 * 1000), PaycheckInterval) -- Prevent paychecks from stopping forever once 0 players
-        return 
+        return
     end
     for _, Player in pairs(Core.Players) do
         if not Player then return end
-        local payment = Shared.Jobs[Player.PlayerData.job.name]['grades'][tostring(Player.PlayerData.job.grade.level)].payment
+        local payment = Shared.Jobs[Player.PlayerData.job.name]['grades'][tostring(Player.PlayerData.job.grade.level)]
+            .payment
         if not payment then payment = Player.PlayerData.job.payment end
 
         -- If job + payment positive, and is off or on duty
         if Player.PlayerData.job and payment > 0 and (Shared.Jobs[Player.PlayerData.job.name].offDutyPay or Player.PlayerData.job.onduty) then
             -- Add the money
             Player.Functions.AddMoney('bank', payment, 'paycheck')
-            TriggerClientEvent('Core:Notify', Player.PlayerData.source, Lang:t('info.received_paycheck', { value = payment }))
+            TriggerClientEvent('Core:Notify', Player.PlayerData.source,
+                Lang:t('info.received_paycheck', { value = payment }))
         end
     end
     SetTimeout(Core.Config.Money.PayCheckTimeOut * (60 * 1000), PaycheckInterval)
@@ -489,8 +491,8 @@ end
 ---@param source any
 ---@param item string
 function Core.Functions.UseItem(source, item)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    exports['qb-inventory']:UseItem(source, item)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    exports['bv-inventory']:UseItem(source, item)
 end
 
 ---Kick Player
@@ -629,7 +631,12 @@ function Core.Functions.IsPlayerBanned(source)
     if not result then return false end
     if os.time() < result.expire then
         local timeTable = os.date('*t', tonumber(result.expire))
-        return true, 'You have been banned from the server:\n' .. result.reason .. '\nYour ban expires ' .. timeTable.day .. '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
+        return true,
+            'You have been banned from the server:\n' ..
+            result.reason ..
+            '\nYour ban expires ' ..
+            timeTable.day ..
+            '/' .. timeTable.month .. '/' .. timeTable.year .. ' ' .. timeTable.hour .. ':' .. timeTable.min .. '\n'
     else
         MySQL.query('DELETE FROM bans WHERE id = ?', { result.id })
     end
@@ -686,8 +693,8 @@ end
 ---@param amount number
 ---@return boolean
 function Core.Functions.HasItem(source, items, amount)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    return exports['qb-inventory']:HasItem(source, items, amount)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    return exports['bv-inventory']:HasItem(source, items, amount)
 end
 
 ---Notify
@@ -710,7 +717,8 @@ function Core.Functions.PrepForSQL(source, data, pattern)
     local player = Core.Functions.GetPlayer(src)
     local result = string.match(data, pattern)
     if not result or string.len(result) ~= string.len(data) then
-        TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'SQL Exploit Attempted', 'red', string.format('%s attempted to exploit SQL!', player.PlayerData.license))
+        TriggerEvent('bv-log:server:CreateLog', 'anticheat', 'SQL Exploit Attempted', 'red',
+            string.format('%s attempted to exploit SQL!', player.PlayerData.license))
         return false
     end
     return true

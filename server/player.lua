@@ -21,7 +21,8 @@ function Core.Player.Login(source, citizenid, newData)
                 Core.Player.CheckPlayerData(source, PlayerData)
             else
                 DropPlayer(source, Lang:t('info.exploit_dropped'))
-                TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Joining Exploit', false)
+                TriggerEvent('bv-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white',
+                    GetPlayerName(source) .. ' Has Been Dropped For Character Joining Exploit', false)
             end
         else
             Core.Player.CheckPlayerData(source, newData)
@@ -146,8 +147,8 @@ function Core.Player.CheckPlayerData(source, PlayerData)
 
     applyDefaults(PlayerData, Core.Config.Player.PlayerDefaults)
 
-    if GetResourceState('qb-inventory') ~= 'missing' then
-        PlayerData.items = exports['qb-inventory']:LoadInventory(PlayerData.source, PlayerData.citizenid)
+    if GetResourceState('bv-inventory') ~= 'missing' then
+        PlayerData.items = exports['bv-inventory']:LoadInventory(PlayerData.source, PlayerData.citizenid)
     end
 
     return Core.Player.CreatePlayer(PlayerData, Offline)
@@ -321,9 +322,33 @@ function Core.Player.CreatePlayer(PlayerData, Offline)
         if not self.Offline then
             self.Functions.UpdatePlayerData()
             if amount > 100000 then
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'AddMoney', 'lightgreen', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') added, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason, true)
+                TriggerEvent('bv-log:server:CreateLog', 'playermoney', 'AddMoney', 'lightgreen',
+                    '**' ..
+                    GetPlayerName(self.PlayerData.source) ..
+                    ' (citizenid: ' ..
+                    self.PlayerData.citizenid ..
+                    ' | id: ' ..
+                    self.PlayerData.source ..
+                    ')** $' ..
+                    amount ..
+                    ' (' ..
+                    moneytype ..
+                    ') added, new ' ..
+                    moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason, true)
             else
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'AddMoney', 'lightgreen', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') added, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
+                TriggerEvent('bv-log:server:CreateLog', 'playermoney', 'AddMoney', 'lightgreen',
+                    '**' ..
+                    GetPlayerName(self.PlayerData.source) ..
+                    ' (citizenid: ' ..
+                    self.PlayerData.citizenid ..
+                    ' | id: ' ..
+                    self.PlayerData.source ..
+                    ')** $' ..
+                    amount ..
+                    ' (' ..
+                    moneytype ..
+                    ') added, new ' ..
+                    moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
             end
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, amount, false)
             TriggerClientEvent('Core:Client:OnMoneyChange', self.PlayerData.source, moneytype, amount, 'add', reason)
@@ -352,13 +377,37 @@ function Core.Player.CreatePlayer(PlayerData, Offline)
         if not self.Offline then
             self.Functions.UpdatePlayerData()
             if amount > 100000 then
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') removed, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason, true)
+                TriggerEvent('bv-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red',
+                    '**' ..
+                    GetPlayerName(self.PlayerData.source) ..
+                    ' (citizenid: ' ..
+                    self.PlayerData.citizenid ..
+                    ' | id: ' ..
+                    self.PlayerData.source ..
+                    ')** $' ..
+                    amount ..
+                    ' (' ..
+                    moneytype ..
+                    ') removed, new ' ..
+                    moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason, true)
             else
-                TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') removed, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
+                TriggerEvent('bv-log:server:CreateLog', 'playermoney', 'RemoveMoney', 'red',
+                    '**' ..
+                    GetPlayerName(self.PlayerData.source) ..
+                    ' (citizenid: ' ..
+                    self.PlayerData.citizenid ..
+                    ' | id: ' ..
+                    self.PlayerData.source ..
+                    ')** $' ..
+                    amount ..
+                    ' (' ..
+                    moneytype ..
+                    ') removed, new ' ..
+                    moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
             end
             TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, amount, true)
             if moneytype == 'bank' then
-                TriggerClientEvent('qb-phone:client:RemoveBankMoney', self.PlayerData.source, amount)
+                TriggerClientEvent('bv-phone:client:RemoveBankMoney', self.PlayerData.source, amount)
             end
             TriggerClientEvent('Core:Client:OnMoneyChange', self.PlayerData.source, moneytype, amount, 'remove', reason)
             TriggerEvent('Core:Server:OnMoneyChange', self.PlayerData.source, moneytype, amount, 'remove', reason)
@@ -378,8 +427,20 @@ function Core.Player.CreatePlayer(PlayerData, Offline)
 
         if not self.Offline then
             self.Functions.UpdatePlayerData()
-            TriggerEvent('qb-log:server:CreateLog', 'playermoney', 'SetMoney', 'green', '**' .. GetPlayerName(self.PlayerData.source) .. ' (citizenid: ' .. self.PlayerData.citizenid .. ' | id: ' .. self.PlayerData.source .. ')** $' .. amount .. ' (' .. moneytype .. ') set, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
-            TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, math.abs(difference), difference < 0)
+            TriggerEvent('bv-log:server:CreateLog', 'playermoney', 'SetMoney', 'green',
+                '**' ..
+                GetPlayerName(self.PlayerData.source) ..
+                ' (citizenid: ' ..
+                self.PlayerData.citizenid ..
+                ' | id: ' ..
+                self.PlayerData.source ..
+                ')** $' ..
+                amount ..
+                ' (' ..
+                moneytype ..
+                ') set, new ' .. moneytype .. ' balance: ' .. self.PlayerData.money[moneytype] .. ' reason: ' .. reason)
+            TriggerClientEvent('hud:client:OnMoneyChange', self.PlayerData.source, moneytype, math.abs(difference),
+                difference < 0)
             TriggerClientEvent('Core:Client:OnMoneyChange', self.PlayerData.source, moneytype, amount, 'set', reason)
             TriggerEvent('Core:Server:OnMoneyChange', self.PlayerData.source, moneytype, amount, 'set', reason)
         end
@@ -487,19 +548,21 @@ function Core.Player.Save(source)
     local pcoords = GetEntityCoords(ped)
     local PlayerData = Core.Players[source].PlayerData
     if PlayerData then
-        MySQL.insert('INSERT INTO players (citizenid, cid, license, name, money, charinfo, job, gang, position, metadata) VALUES (:citizenid, :cid, :license, :name, :money, :charinfo, :job, :gang, :position, :metadata) ON DUPLICATE KEY UPDATE cid = :cid, name = :name, money = :money, charinfo = :charinfo, job = :job, gang = :gang, position = :position, metadata = :metadata', {
-            citizenid = PlayerData.citizenid,
-            cid = tonumber(PlayerData.cid),
-            license = PlayerData.license,
-            name = PlayerData.name,
-            money = json.encode(PlayerData.money),
-            charinfo = json.encode(PlayerData.charinfo),
-            job = json.encode(PlayerData.job),
-            gang = json.encode(PlayerData.gang),
-            position = json.encode(pcoords),
-            metadata = json.encode(PlayerData.metadata)
-        })
-        if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(source) end
+        MySQL.insert(
+            'INSERT INTO players (citizenid, cid, license, name, money, charinfo, job, gang, position, metadata) VALUES (:citizenid, :cid, :license, :name, :money, :charinfo, :job, :gang, :position, :metadata) ON DUPLICATE KEY UPDATE cid = :cid, name = :name, money = :money, charinfo = :charinfo, job = :job, gang = :gang, position = :position, metadata = :metadata',
+            {
+                citizenid = PlayerData.citizenid,
+                cid = tonumber(PlayerData.cid),
+                license = PlayerData.license,
+                name = PlayerData.name,
+                money = json.encode(PlayerData.money),
+                charinfo = json.encode(PlayerData.charinfo),
+                job = json.encode(PlayerData.job),
+                gang = json.encode(PlayerData.gang),
+                position = json.encode(pcoords),
+                metadata = json.encode(PlayerData.metadata)
+            })
+        if GetResourceState('bv-inventory') ~= 'missing' then exports['bv-inventory']:SaveInventory(source) end
         Core.ShowSuccess(resourceName, PlayerData.name .. ' PLAYER SAVED!')
     else
         Core.ShowError(resourceName, 'ERROR Core.PLAYER.SAVE - PLAYERDATA IS EMPTY!')
@@ -508,19 +571,21 @@ end
 
 function Core.Player.SaveOffline(PlayerData)
     if PlayerData then
-        MySQL.insert('INSERT INTO players (citizenid, cid, license, name, money, charinfo, job, gang, position, metadata) VALUES (:citizenid, :cid, :license, :name, :money, :charinfo, :job, :gang, :position, :metadata) ON DUPLICATE KEY UPDATE cid = :cid, name = :name, money = :money, charinfo = :charinfo, job = :job, gang = :gang, position = :position, metadata = :metadata', {
-            citizenid = PlayerData.citizenid,
-            cid = tonumber(PlayerData.cid),
-            license = PlayerData.license,
-            name = PlayerData.name,
-            money = json.encode(PlayerData.money),
-            charinfo = json.encode(PlayerData.charinfo),
-            job = json.encode(PlayerData.job),
-            gang = json.encode(PlayerData.gang),
-            position = json.encode(PlayerData.position),
-            metadata = json.encode(PlayerData.metadata)
-        })
-        if GetResourceState('qb-inventory') ~= 'missing' then exports['qb-inventory']:SaveInventory(PlayerData, true) end
+        MySQL.insert(
+            'INSERT INTO players (citizenid, cid, license, name, money, charinfo, job, gang, position, metadata) VALUES (:citizenid, :cid, :license, :name, :money, :charinfo, :job, :gang, :position, :metadata) ON DUPLICATE KEY UPDATE cid = :cid, name = :name, money = :money, charinfo = :charinfo, job = :job, gang = :gang, position = :position, metadata = :metadata',
+            {
+                citizenid = PlayerData.citizenid,
+                cid = tonumber(PlayerData.cid),
+                license = PlayerData.license,
+                name = PlayerData.name,
+                money = json.encode(PlayerData.money),
+                charinfo = json.encode(PlayerData.charinfo),
+                job = json.encode(PlayerData.job),
+                gang = json.encode(PlayerData.gang),
+                position = json.encode(PlayerData.position),
+                metadata = json.encode(PlayerData.metadata)
+            })
+        if GetResourceState('bv-inventory') ~= 'missing' then exports['bv-inventory']:SaveInventory(PlayerData, true) end
         Core.ShowSuccess(resourceName, PlayerData.name .. ' OFFLINE PLAYER SAVED!')
     else
         Core.ShowError(resourceName, 'ERROR Core.PLAYER.SAVEOFFLINE - PLAYERDATA IS EMPTY!')
@@ -559,12 +624,14 @@ function Core.Player.DeleteCharacter(source, citizenid)
 
         MySQL.transaction(queries, function(result2)
             if result2 then
-                TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Character Deleted', 'red', '**' .. GetPlayerName(source) .. '** ' .. license .. ' deleted **' .. citizenid .. '**..')
+                TriggerEvent('bv-log:server:CreateLog', 'joinleave', 'Character Deleted', 'red',
+                    '**' .. GetPlayerName(source) .. '** ' .. license .. ' deleted **' .. citizenid .. '**..')
             end
         end)
     else
         DropPlayer(source, Lang:t('info.exploit_dropped'))
-        TriggerEvent('qb-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white', GetPlayerName(source) .. ' Has Been Dropped For Character Deletion Exploit', true)
+        TriggerEvent('bv-log:server:CreateLog', 'anticheat', 'Anti-Cheat', 'white',
+            GetPlayerName(source) .. ' Has Been Dropped For Character Deletion Exploit', true)
     end
 end
 
@@ -586,7 +653,8 @@ function Core.Player.ForceDeleteCharacter(citizenid)
 
         MySQL.transaction(queries, function(result2)
             if result2 then
-                TriggerEvent('qb-log:server:CreateLog', 'joinleave', 'Character Force Deleted', 'red', 'Character **' .. citizenid .. '** got deleted')
+                TriggerEvent('bv-log:server:CreateLog', 'joinleave', 'Character Force Deleted', 'red',
+                    'Character **' .. citizenid .. '** got deleted')
             end
         end)
     end
@@ -595,70 +663,84 @@ end
 -- Inventory Backwards Compatibility
 
 function Core.Player.SaveInventory(source)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    exports['qb-inventory']:SaveInventory(source, false)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    exports['bv-inventory']:SaveInventory(source, false)
 end
 
 function Core.Player.SaveOfflineInventory(PlayerData)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    exports['qb-inventory']:SaveInventory(PlayerData, true)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    exports['bv-inventory']:SaveInventory(PlayerData, true)
 end
 
 function Core.Player.GetTotalWeight(items)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    return exports['qb-inventory']:GetTotalWeight(items)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    return exports['bv-inventory']:GetTotalWeight(items)
 end
 
 function Core.Player.GetSlotsByItem(items, itemName)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    return exports['qb-inventory']:GetSlotsByItem(items, itemName)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    return exports['bv-inventory']:GetSlotsByItem(items, itemName)
 end
 
 function Core.Player.GetFirstSlotByItem(items, itemName)
-    if GetResourceState('qb-inventory') == 'missing' then return end
-    return exports['qb-inventory']:GetFirstSlotByItem(items, itemName)
+    if GetResourceState('bv-inventory') == 'missing' then return end
+    return exports['bv-inventory']:GetFirstSlotByItem(items, itemName)
 end
 
 -- Util Functions
 
 function Core.Player.CreateCitizenId()
     local CitizenId = tostring(Core.Shared.RandomStr(3) .. Core.Shared.RandomInt(5)):upper()
-    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE citizenid = ?) AS uniqueCheck', { CitizenId })
+    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE citizenid = ?) AS uniqueCheck',
+        { CitizenId })
     if result == 0 then return CitizenId end
     return Core.Player.CreateCitizenId()
 end
 
 function Core.Functions.CreateAccountNumber()
-    local AccountNumber = 'US0' .. math.random(1, 9) .. 'Core' .. math.random(1111, 9999) .. math.random(1111, 9999) .. math.random(11, 99)
-    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(charinfo, "$.account")) = ?) AS uniqueCheck', { AccountNumber })
+    local AccountNumber = 'US0' ..
+        math.random(1, 9) .. 'Core' .. math.random(1111, 9999) .. math.random(1111, 9999) .. math.random(11, 99)
+    local result = MySQL.prepare.await(
+        'SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(charinfo, "$.account")) = ?) AS uniqueCheck',
+        { AccountNumber })
     if result == 0 then return AccountNumber end
     return Core.Functions.CreateAccountNumber()
 end
 
 function Core.Functions.CreatePhoneNumber()
     local PhoneNumber = math.random(100, 999) .. math.random(1000000, 9999999)
-    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(charinfo, "$.phone")) = ?) AS uniqueCheck', { PhoneNumber })
+    local result = MySQL.prepare.await(
+        'SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(charinfo, "$.phone")) = ?) AS uniqueCheck',
+        { PhoneNumber })
     if result == 0 then return PhoneNumber end
     return Core.Functions.CreatePhoneNumber()
 end
 
 function Core.Player.CreateFingerId()
-    local FingerId = tostring(Core.Shared.RandomStr(2) .. Core.Shared.RandomInt(3) .. Core.Shared.RandomStr(1) .. Core.Shared.RandomInt(2) .. Core.Shared.RandomStr(3) .. Core.Shared.RandomInt(4))
-    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, "$.fingerprint")) = ?) AS uniqueCheck', { FingerId })
+    local FingerId = tostring(Core.Shared.RandomStr(2) ..
+        Core.Shared.RandomInt(3) ..
+        Core.Shared.RandomStr(1) .. Core.Shared.RandomInt(2) .. Core.Shared.RandomStr(3) .. Core.Shared.RandomInt(4))
+    local result = MySQL.prepare.await(
+        'SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, "$.fingerprint")) = ?) AS uniqueCheck',
+        { FingerId })
     if result == 0 then return FingerId end
     return Core.Player.CreateFingerId()
 end
 
 function Core.Player.CreateWalletId()
     local WalletId = 'BV-' .. math.random(11111111, 99999999)
-    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, "$.walletid")) = ?) AS uniqueCheck', { WalletId })
+    local result = MySQL.prepare.await(
+        'SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, "$.walletid")) = ?) AS uniqueCheck',
+        { WalletId })
     if result == 0 then return WalletId end
     return Core.Player.CreateWalletId()
 end
 
 function Core.Player.CreateSerialNumber()
     local SerialNumber = math.random(11111111, 99999999)
-    local result = MySQL.prepare.await('SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, "$.phonedata.SerialNumber")) = ?) AS uniqueCheck', { SerialNumber })
+    local result = MySQL.prepare.await(
+        'SELECT EXISTS(SELECT 1 FROM players WHERE JSON_UNQUOTE(JSON_EXTRACT(metadata, "$.phonedata.SerialNumber")) = ?) AS uniqueCheck',
+        { SerialNumber })
     if result == 0 then return SerialNumber end
     return Core.Player.CreateSerialNumber()
 end

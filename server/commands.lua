@@ -1,8 +1,8 @@
 Core.Commands = {}
 Core.Commands.List = {}
 Core.Commands.IgnoreList = { -- Ignore old perm levels while keeping backwards compatibility
-    ['god'] = true,            -- We don't need to create an ace because god is allowed all commands
-    ['user'] = true            -- We don't need to create an ace because builtin.everyone
+    ['god'] = true,          -- We don't need to create an ace because god is allowed all commands
+    ['user'] = true          -- We don't need to create an ace because builtin.everyone
 }
 
 CreateThread(function() -- Add ace to node for perm checking
@@ -81,7 +81,9 @@ function Core.Commands.Refresh(source)
 end
 
 -- Teleport
-Core.Commands.Add('tp', Lang:t('command.tp.help'), { { name = Lang:t('command.tp.params.x.name'), help = Lang:t('command.tp.params.x.help') }, { name = Lang:t('command.tp.params.y.name'), help = Lang:t('command.tp.params.y.help') }, { name = Lang:t('command.tp.params.z.name'), help = Lang:t('command.tp.params.z.help') } }, false, function(source, args)
+Core.Commands.Add('tp', Lang:t('command.tp.help'),
+    { { name = Lang:t('command.tp.params.x.name'), help = Lang:t('command.tp.params.x.help') }, { name = Lang:t('command.tp.params.y.name'), help = Lang:t('command.tp.params.y.help') }, { name = Lang:t('command.tp.params.z.name'), help = Lang:t('command.tp.params.z.help') } },
+    false, function(source, args)
     if args[1] and not args[2] and not args[3] then
         if tonumber(args[1]) then
             local target = GetPlayerPed(tonumber(args[1]))
@@ -94,7 +96,8 @@ Core.Commands.Add('tp', Lang:t('command.tp.help'), { { name = Lang:t('command.tp
         else
             local location = Shared.Locations[args[1]]
             if location then
-                TriggerClientEvent('Core:Command:TeleportToCoords', source, location.x, location.y, location.z, location.w)
+                TriggerClientEvent('Core:Command:TeleportToCoords', source, location.x, location.y, location.z,
+                    location.w)
             else
                 TriggerClientEvent('Core:Notify', source, Lang:t('error.location_not_exist'), 'error')
             end
@@ -127,7 +130,9 @@ end, 'admin')
 
 -- Permissions
 
-Core.Commands.Add('addpermission', Lang:t('command.addpermission.help'), { { name = Lang:t('command.addpermission.params.id.name'), help = Lang:t('command.addpermission.params.id.help') }, { name = Lang:t('command.addpermission.params.permission.name'), help = Lang:t('command.addpermission.params.permission.help') } }, true, function(source, args)
+Core.Commands.Add('addpermission', Lang:t('command.addpermission.help'),
+    { { name = Lang:t('command.addpermission.params.id.name'), help = Lang:t('command.addpermission.params.id.help') }, { name = Lang:t('command.addpermission.params.permission.name'), help = Lang:t('command.addpermission.params.permission.help') } },
+    true, function(source, args)
     local Player = Core.Functions.GetPlayer(tonumber(args[1]))
     local permission = tostring(args[2]):lower()
     if Player then
@@ -137,7 +142,9 @@ Core.Commands.Add('addpermission', Lang:t('command.addpermission.help'), { { nam
     end
 end, 'god')
 
-Core.Commands.Add('removepermission', Lang:t('command.removepermission.help'), { { name = Lang:t('command.removepermission.params.id.name'), help = Lang:t('command.removepermission.params.id.help') }, { name = Lang:t('command.removepermission.params.permission.name'), help = Lang:t('command.removepermission.params.permission.help') } }, true, function(source, args)
+Core.Commands.Add('removepermission', Lang:t('command.removepermission.help'),
+    { { name = Lang:t('command.removepermission.params.id.name'), help = Lang:t('command.removepermission.params.id.help') }, { name = Lang:t('command.removepermission.params.permission.name'), help = Lang:t('command.removepermission.params.permission.help') } },
+    true, function(source, args)
     local Player = Core.Functions.GetPlayer(tonumber(args[1]))
     local permission = tostring(args[2]):lower()
     if Player then
@@ -162,7 +169,9 @@ Core.Commands.Add('openserver', Lang:t('command.openserver.help'), {}, false, fu
     end
 end, 'admin')
 
-Core.Commands.Add('closeserver', Lang:t('command.closeserver.help'), { { name = Lang:t('command.closeserver.params.reason.name'), help = Lang:t('command.closeserver.params.reason.help') } }, false, function(source, args)
+Core.Commands.Add('closeserver', Lang:t('command.closeserver.help'),
+    { { name = Lang:t('command.closeserver.params.reason.name'), help = Lang:t('command.closeserver.params.reason.help') } },
+    false, function(source, args)
     if Core.Config.Server.Closed then
         TriggerClientEvent('Core:Notify', source, Lang:t('error.server_already_closed'), 'error')
         return
@@ -184,9 +193,11 @@ end, 'admin')
 
 -- Vehicle
 
-Core.Commands.Add('car', Lang:t('command.car.help'), { { name = Lang:t('command.car.params.model.name'), help = Lang:t('command.car.params.model.help') } }, true, function(source, args)
-    TriggerClientEvent('Core:Command:SpawnVehicle', source, args[1])
-end, 'admin')
+Core.Commands.Add('car', Lang:t('command.car.help'),
+    { { name = Lang:t('command.car.params.model.name'), help = Lang:t('command.car.params.model.help') } }, true,
+    function(source, args)
+        TriggerClientEvent('Core:Command:SpawnVehicle', source, args[1])
+    end, 'admin')
 
 Core.Commands.Add('dv', Lang:t('command.dv.help'), {}, false, function(source)
     TriggerClientEvent('Core:Command:DeleteVehicle', source)
@@ -219,7 +230,9 @@ end, 'admin')
 
 -- Money
 
-Core.Commands.Add('givemoney', Lang:t('command.givemoney.help'), { { name = Lang:t('command.givemoney.params.id.name'), help = Lang:t('command.givemoney.params.id.help') }, { name = Lang:t('command.givemoney.params.moneytype.name'), help = Lang:t('command.givemoney.params.moneytype.help') }, { name = Lang:t('command.givemoney.params.amount.name'), help = Lang:t('command.givemoney.params.amount.help') } }, true, function(source, args)
+Core.Commands.Add('givemoney', Lang:t('command.givemoney.help'),
+    { { name = Lang:t('command.givemoney.params.id.name'), help = Lang:t('command.givemoney.params.id.help') }, { name = Lang:t('command.givemoney.params.moneytype.name'), help = Lang:t('command.givemoney.params.moneytype.help') }, { name = Lang:t('command.givemoney.params.amount.name'), help = Lang:t('command.givemoney.params.amount.help') } },
+    true, function(source, args)
     local Player = Core.Functions.GetPlayer(tonumber(args[1]))
     if Player then
         Player.Functions.AddMoney(tostring(args[2]), tonumber(args[3]), 'Admin give money')
@@ -228,7 +241,9 @@ Core.Commands.Add('givemoney', Lang:t('command.givemoney.help'), { { name = Lang
     end
 end, 'admin')
 
-Core.Commands.Add('setmoney', Lang:t('command.setmoney.help'), { { name = Lang:t('command.setmoney.params.id.name'), help = Lang:t('command.setmoney.params.id.help') }, { name = Lang:t('command.setmoney.params.moneytype.name'), help = Lang:t('command.setmoney.params.moneytype.help') }, { name = Lang:t('command.setmoney.params.amount.name'), help = Lang:t('command.setmoney.params.amount.help') } }, true, function(source, args)
+Core.Commands.Add('setmoney', Lang:t('command.setmoney.help'),
+    { { name = Lang:t('command.setmoney.params.id.name'), help = Lang:t('command.setmoney.params.id.help') }, { name = Lang:t('command.setmoney.params.moneytype.name'), help = Lang:t('command.setmoney.params.moneytype.help') }, { name = Lang:t('command.setmoney.params.amount.name'), help = Lang:t('command.setmoney.params.amount.help') } },
+    true, function(source, args)
     local Player = Core.Functions.GetPlayer(tonumber(args[1]))
     if Player then
         Player.Functions.SetMoney(tostring(args[2]), tonumber(args[3]))
@@ -241,10 +256,13 @@ end, 'admin')
 
 Core.Commands.Add('job', Lang:t('command.job.help'), {}, false, function(source)
     local PlayerJob = Core.Functions.GetPlayer(source).PlayerData.job
-    TriggerClientEvent('Core:Notify', source, Lang:t('info.job_info', { value = PlayerJob.label, value2 = PlayerJob.grade.name, value3 = PlayerJob.onduty }))
+    TriggerClientEvent('Core:Notify', source,
+        Lang:t('info.job_info', { value = PlayerJob.label, value2 = PlayerJob.grade.name, value3 = PlayerJob.onduty }))
 end, 'user')
 
-Core.Commands.Add('setjob', Lang:t('command.setjob.help'), { { name = Lang:t('command.setjob.params.id.name'), help = Lang:t('command.setjob.params.id.help') }, { name = Lang:t('command.setjob.params.job.name'), help = Lang:t('command.setjob.params.job.help') }, { name = Lang:t('command.setjob.params.grade.name'), help = Lang:t('command.setjob.params.grade.help') } }, true, function(source, args)
+Core.Commands.Add('setjob', Lang:t('command.setjob.help'),
+    { { name = Lang:t('command.setjob.params.id.name'), help = Lang:t('command.setjob.params.id.help') }, { name = Lang:t('command.setjob.params.job.name'), help = Lang:t('command.setjob.params.job.help') }, { name = Lang:t('command.setjob.params.grade.name'), help = Lang:t('command.setjob.params.grade.help') } },
+    true, function(source, args)
     local Player = Core.Functions.GetPlayer(tonumber(args[1]))
     if Player then
         Player.Functions.SetJob(tostring(args[2]), tonumber(args[3]))
@@ -257,10 +275,13 @@ end, 'admin')
 
 Core.Commands.Add('gang', Lang:t('command.gang.help'), {}, false, function(source)
     local PlayerGang = Core.Functions.GetPlayer(source).PlayerData.gang
-    TriggerClientEvent('Core:Notify', source, Lang:t('info.gang_info', { value = PlayerGang.label, value2 = PlayerGang.grade.name }))
+    TriggerClientEvent('Core:Notify', source,
+        Lang:t('info.gang_info', { value = PlayerGang.label, value2 = PlayerGang.grade.name }))
 end, 'user')
 
-Core.Commands.Add('setgang', Lang:t('command.setgang.help'), { { name = Lang:t('command.setgang.params.id.name'), help = Lang:t('command.setgang.params.id.help') }, { name = Lang:t('command.setgang.params.gang.name'), help = Lang:t('command.setgang.params.gang.help') }, { name = Lang:t('command.setgang.params.grade.name'), help = Lang:t('command.setgang.params.grade.help') } }, true, function(source, args)
+Core.Commands.Add('setgang', Lang:t('command.setgang.help'),
+    { { name = Lang:t('command.setgang.params.id.name'), help = Lang:t('command.setgang.params.id.help') }, { name = Lang:t('command.setgang.params.gang.name'), help = Lang:t('command.setgang.params.gang.help') }, { name = Lang:t('command.setgang.params.grade.name'), help = Lang:t('command.setgang.params.grade.help') } },
+    true, function(source, args)
     local Player = Core.Functions.GetPlayer(tonumber(args[1]))
     if Player then
         Player.Functions.SetGang(tostring(args[2]), tonumber(args[3]))
@@ -295,7 +316,11 @@ Core.Commands.Add('ooc', Lang:t('command.ooc.help'), {}, false, function(source,
                     multiline = true,
                     args = { 'Proximity OOC | ' .. GetPlayerName(source), message }
                 })
-                TriggerEvent('qb-log:server:CreateLog', 'ooc', 'OOC', 'white', '**' .. GetPlayerName(source) .. '** (CitizenID: ' .. Player.PlayerData.citizenid .. ' | ID: ' .. source .. ') **Message:** ' .. message, false)
+                TriggerEvent('bv-log:server:CreateLog', 'ooc', 'OOC', 'white',
+                    '**' ..
+                    GetPlayerName(source) ..
+                    '** (CitizenID: ' ..
+                    Player.PlayerData.citizenid .. ' | ID: ' .. source .. ') **Message:** ' .. message, false)
             end
         end
     end
@@ -303,21 +328,23 @@ end, 'user')
 
 -- Me command
 
-Core.Commands.Add('me', Lang:t('command.me.help'), { { name = Lang:t('command.me.params.message.name'), help = Lang:t('command.me.params.message.help') } }, false, function(source, args)
-    if #args < 1 then
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.missing_args2'), 'error')
-        return
-    end
-    local ped = GetPlayerPed(source)
-    local pCoords = GetEntityCoords(ped)
-    local msg = table.concat(args, ' '):gsub('[~<].-[>~]', '')
-    local Players = Core.Functions.GetPlayers()
-    for i = 1, #Players do
-        local Player = Players[i]
-        local target = GetPlayerPed(Player)
-        local tCoords = GetEntityCoords(target)
-        if target == ped or #(pCoords - tCoords) < 20 then
-            TriggerClientEvent('Core:Command:ShowMe3D', Player, source, msg)
+Core.Commands.Add('me', Lang:t('command.me.help'),
+    { { name = Lang:t('command.me.params.message.name'), help = Lang:t('command.me.params.message.help') } }, false,
+    function(source, args)
+        if #args < 1 then
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.missing_args2'), 'error')
+            return
         end
-    end
-end, 'user')
+        local ped = GetPlayerPed(source)
+        local pCoords = GetEntityCoords(ped)
+        local msg = table.concat(args, ' '):gsub('[~<].-[>~]', '')
+        local Players = Core.Functions.GetPlayers()
+        for i = 1, #Players do
+            local Player = Players[i]
+            local target = GetPlayerPed(Player)
+            local tCoords = GetEntityCoords(target)
+            if target == ped or #(pCoords - tCoords) < 20 then
+                TriggerClientEvent('Core:Command:ShowMe3D', Player, source, msg)
+            end
+        end
+    end, 'user')

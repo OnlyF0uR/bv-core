@@ -1,92 +1,112 @@
-CurrentWeather = 'EXTRASUNNY'
+local CurrentWeather = Config.StartWeather
 local lastWeather = CurrentWeather
-local baseTime = 0
-local timeOffset = 0
-local timer = 0
-local freezeTime = false
-local blackout = false
+local baseTime = Config.BaseTime
+local timeOffset = Config.TimeOffset
+local freezeTime = Config.FreezeTime
+local blackout = Config.Blackout
+local blackoutVehicle = Config.BlackoutVehicle
+local disable = Config.Disabled
 
-RegisterNetEvent('core-adapters:weather:updateWeather')
-AddEventHandler('core-adapters:weather:updateWeather', function(NewWeather, newblackout)
+AddEventHandler('Core:Client:OnPlayerLoaded', function()
+    disable = false
+    TriggerServerEvent('bv-weathersync:server:RequestStateSync')
+end)
+
+RegisterNetEvent('bv-weathersync:client:EnableSync', function()
+    disable = false
+    TriggerServerEvent('bv-weathersync:server:RequestStateSync')
+end)
+
+RegisterNetEvent('bv-weathersync:client:DisableSync', function()
+    disable = true
+    SetRainLevel(0.0)
+    SetWeatherTypePersist('CLEAR')
+    SetWeatherTypeNow('CLEAR')
+    SetWeatherTypeNowPersist('CLEAR')
+    NetworkOverrideClockTime(18, 0, 0)
+end)
+
+RegisterNetEvent('bv-weathersync:client:SyncWeather', function(NewWeather, newblackout)
     CurrentWeather = NewWeather
     blackout = newblackout
 end)
 
-Citizen.CreateThread(function()
-    while true do
-        if lastWeather ~= CurrentWeather then
-            lastWeather = CurrentWeather
-            SetWeatherTypeOverTime(CurrentWeather, 15.0)
-
-            Wait(15000)
-        end
-
-        Wait(250)
-
-        SetBlackout(blackout)
-        ClearOverrideWeather()
-        ClearWeatherTypePersist()
-        SetWeatherTypePersist(lastWeather)
-        SetWeatherTypeNow(lastWeather)
-        SetWeatherTypeNowPersist(lastWeather)
-        if lastWeather == 'XMAS' then
-            SetForceVehicleTrails(true)
-            SetForcePedFootstepsTracks(true)
-        else
-            SetForceVehicleTrails(false)
-            SetForcePedFootstepsTracks(false)
-        end
-    end
-end)
-
-RegisterNetEvent('core-adapters:weather:updateTime')
-AddEventHandler('core-adapters:weather:updateTime', function(base, offset, freeze)
+RegisterNetEvent('bv-weathersync:client:SyncTime', function(base, offset, freeze)
     freezeTime = freeze
     timeOffset = offset
     baseTime = base
 end)
 
-Citizen.CreateThread(function()
-    local hour = 0
-    local minute = 0
+CreateThread(function()
     while true do
-        Wait(100)
-
-        local newBaseTime = baseTime
-        if GetGameTimer() - 500 > timer then
-            newBaseTime = newBaseTime + 0.25
-            timer = GetGameTimer()
+        if not disable then
+            if lastWeather ~= CurrentWeather then
+                lastWeather = CurrentWeather
+                SetWeatherTypeOverTime(CurrentWeather, 15.0)
+                Wait(15000)
+            end
+            Wait(100) -- Wait 0 seconds to prevent crashing.
+            SetArtificialLightsState(blackout)
+            SetArtificialLightsStateAffectsVehicles(blackoutVehicle)
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
+            SetWeatherTypePersist(lastWeather)
+            SetWeatherTypeNow(lastWeather)
+            SetWeatherTypeNowPersist(lastWeather)
+            if lastWeather == 'XMAS' then
+                SetForceVehicleTrails(true)
+                SetForcePedFootstepsTracks(true)
+            else
+                SetForceVehicleTrails(false)
+                SetForcePedFootstepsTracks(false)
+            end
+            if lastWeather == 'RAIN' then
+                SetRainLevel(0.3)
+            elseif lastWeather == 'THUNDER' then
+                SetRainLevel(0.5)
+            else
+                SetRainLevel(0.0)
+            end
+        else
+            Wait(1000)
         end
-
-        if freezeTime then
-            timeOffset = timeOffset + baseTime - newBaseTime
-        end
-
-        baseTime = newBaseTime
-        hour = math.floor(((baseTime + timeOffset) / 60) % 24)
-        minute = math.floor((baseTime + timeOffset) % 60)
-
-        NetworkOverrideClockTime(hour, minute, 0)
     end
 end)
 
-AddEventHandler('playerSpawned', function()
-    TriggerServerEvent('core-adapters:weather:requestSync')
-end)
+CreateThread(function()
+    local hour
+    local minute = 0
+    local second = 0 --Add seconds for shadow smoothness
+    local timeIncrement = Config.RealTimeSync and 0.25 or 1
+    local tick = GetGameTimer()
 
-Citizen.CreateThread(function()
-    TriggerEvent('chat:addSuggestion', '/weather', 'Change the weather.', {{
-        name = "Weather types",
-        help = "Available types: extrasunny, clear, neutral, smog, foggy, overcast, clouds, clearing, rain, thunder, snow, blizzard, snowlight, xmas & halloween"
-    }})
-    TriggerEvent('chat:addSuggestion', '/time', 'Verander de tijd.', {{
-        name = "hours",
-        help = "Number between 0 - 23"
-    }, {
-        name = "minutes",
-        help = "Number between 0 - 59"
-    }})
-    TriggerEvent('chat:addSuggestion', '/freezetime', 'Toggle frozen time.')
-    TriggerEvent('chat:addSuggestion', '/freezeweather', 'Toggle dynamic weather.')
-    TriggerEvent('chat:addSuggestion', '/blackout', 'Toggle blackout.')
+    while true do
+        if not disable then
+            Wait(0)
+            local _, _, _, hours, minutes, _ = GetLocalTime()
+            local newBaseTime = baseTime
+            if tick - (Config.RealTimeSync and 500 or 22) > tick then
+                second = second + timeIncrement
+                tick = GetGameTimer()
+            end
+            if freezeTime then
+                timeOffset = timeOffset + baseTime - newBaseTime
+                second = 0
+            end
+            baseTime = newBaseTime
+            if Config.RealTimeSync then
+                hour = hours
+                minute = minutes
+            else
+                hour = math.floor(((baseTime + timeOffset) / 60) % 24)
+                if minute ~= math.floor((baseTime + timeOffset) % 60) then --Reset seconds to 0 when new minute
+                    minute = math.floor((baseTime + timeOffset) % 60)
+                    second = 0
+                end
+            end
+            NetworkOverrideClockTime(hour, minute, second) --Send hour included seconds to network clock time
+        else
+            Wait(1000)
+        end
+    end
 end)

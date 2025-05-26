@@ -17,9 +17,12 @@ local Translations = {
         no_permission               = 'You don\'t have permissions for this..',
         no_waypoint                 = 'No Waypoint Set.',
         tp_error                    = 'Error While Teleporting.',
-        ban_table_not_found         = '[Core] - Unable to find the bans table in the database. Please ensure you have imported the SQL file correctly.',
-        connecting_database_error   = '[Core] - An error occurred while connecting to the database. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
-        connecting_database_timeout = '[Core] - The database connection has timed out. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
+        ban_table_not_found         =
+        '[Core] - Unable to find the bans table in the database. Please ensure you have imported the SQL file correctly.',
+        connecting_database_error   =
+        '[Core] - An error occurred while connecting to the database. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
+        connecting_database_timeout =
+        '[Core] - The database connection has timed out. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
     },
     success = {
         server_opened = 'The server has been opened',
@@ -122,6 +125,70 @@ local Translations = {
             },
         },
     },
+    weathersync = {
+        weather = {
+            now_frozen = 'Weather is now frozen.',
+            now_unfrozen = 'Weather is no longer frozen.',
+            invalid_syntax = 'Invalid syntax, correct syntax is: /weather <weathertype> ',
+            invalid_syntaxc = 'Invalid syntax, use /weather <weatherType> instead!',
+            updated = 'Weather has been updated.',
+            invalid =
+            'Invalid weather type, valid weather types are: \nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ',
+            invalidc =
+            'Invalid weather type, valid weather types are: \nEXTRASUNNY CLEAR NEUTRAL SMOG FOGGY OVERCAST CLOUDS CLEARING RAIN THUNDER SNOW BLIZZARD SNOWLIGHT XMAS HALLOWEEN ',
+            willchangeto = 'Weather will change to: %{value}.',
+            accessdenied = 'Access for command /weather denied.',
+        },
+        dynamic_weather = {
+            disabled = 'Dynamic weather changes are now disabled.',
+            enabled = 'Dynamic weather changes are now enabled.',
+        },
+        time = {
+            frozenc = 'Time is now frozen.',
+            unfrozenc = 'Time is no longer frozen.',
+            now_frozen = 'Time is now frozen.',
+            now_unfrozen = 'Time is no longer frozen.',
+            morning = 'Time set to morning.',
+            noon = 'Time set to noon.',
+            evening = 'Time set to evening.',
+            night = 'Time set to night.',
+            change = 'Time has changed to %{value}:%{value2}.',
+            changec = 'Time was changed to: %{value}!',
+            invalid = 'Invalid syntax, correct syntax is: time <hour> <minute> !',
+            invalidc = 'Invalid syntax. Use /time <hour> <minute> instead!',
+            access = 'Access for command /time denied.',
+        },
+        blackout = {
+            enabled = 'Blackout is now enabled.',
+            enabledc = 'Blackout is now enabled.',
+            disabled = 'Blackout is now disabled.',
+            disabledc = 'Blackout is now disabled.',
+        },
+        help = {
+            weathercommand = 'Change the weather.',
+            weathertype = 'weathertype',
+            availableweather =
+            'Available types: extrasunny, clear, neutral, smog, foggy, overcast, clouds, clearing, rain, thunder, snow, blizzard, snowlight, xmas & halloween',
+            timecommand = 'Change the time.',
+            timehname = 'hours',
+            timemname = 'minutes',
+            timeh = 'A number between 0 - 23',
+            timem = 'A number between 0 - 59',
+            freezecommand = 'Freeze / unfreeze time.',
+            freezeweathercommand = 'Enable/disable dynamic weather changes.',
+            morningcommand = 'Set the time to 09:00',
+            nooncommand = 'Set the time to 12:00',
+            eveningcommand = 'Set the time to 18:00',
+            nightcommand = 'Set the time to 23:00',
+            blackoutcommand = 'Toggle blackout mode.',
+        },
+    },
+    carlocks = {
+        locked = 'Vehicle is now locked.',
+        unlocked = 'Vehicle is now unlocked.',
+        lockpicked = 'Successfully lockpicked the vehicle.',
+        lockpick_failed = 'Lockpick failed, try again.',
+    }
 }
 
 Lang = Lang or Locale:new({

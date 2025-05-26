@@ -1,3 +1,5 @@
+Shared = Shared or {}
+
 Shared.PostalCodes = {
   Blip = {
     Text = 'Postal code route %s',

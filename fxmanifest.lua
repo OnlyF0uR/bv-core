@@ -21,6 +21,8 @@ shared_scripts {
     'shared/locations.lua',
     'shared/vehiclekeys.lua',
     'shared/postalcodes.lua',
+    'shared/weathersync.lua',
+    'shared/controls.lua',
 }
 
 client_scripts {

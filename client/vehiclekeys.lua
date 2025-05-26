@@ -38,18 +38,20 @@ local function robKeyLoop()
                             if not isTakingKeys then
                                 isTakingKeys = true
 
-                                TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering), 1)
-                                Core.Functions.Progressbar('steal_keys', Lang:t('progress.takekeys'), 2500, false, false, {
-                                    disableMovement = false,
-                                    disableCarMovement = true,
-                                    disableMouse = false,
-                                    disableCombat = true
-                                }, {}, {}, {}, function() -- Done
-                                    TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
-                                    isTakingKeys = false
-                                end, function()
-                                    isTakingKeys = false
-                                end)
+                                TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering),
+                                    1)
+                                Core.Functions.Progressbar('steal_keys', Lang:t('progress.takekeys'), 2500, false, false,
+                                    {
+                                        disableMovement = false,
+                                        disableCarMovement = true,
+                                        disableMouse = false,
+                                        disableCombat = true
+                                    }, {}, {}, {}, function() -- Done
+                                        TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
+                                        isTakingKeys = false
+                                    end, function()
+                                        isTakingKeys = false
+                                    end)
                             end
                         elseif Shared.LockNPCDrivingCars then
                             TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering), 2)
@@ -70,9 +72,11 @@ local function robKeyLoop()
                         Core.Functions.TriggerCallback('core:server:checkPlayerOwned', function(playerOwned)
                             if not playerOwned then
                                 if Shared.LockNPCParkedCars then
-                                    TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering), 2)
+                                    TriggerServerEvent('core:server:setVehLockState',
+                                        NetworkGetNetworkIdFromEntity(entering), 2)
                                 else
-                                    TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(entering), 1)
+                                    TriggerServerEvent('core:server:setVehLockState',
+                                        NetworkGetNetworkIdFromEntity(entering), 1)
                                 end
                             end
                         end, plate)
@@ -157,8 +161,6 @@ end
 
 exports('removeNoLockVehicles', removeNoLockVehicles)
 
-
-
 -----------------------
 ---- Client Events ----
 -----------------------
@@ -176,14 +178,6 @@ RegisterCommand('togglelocks', function()
     end
 end)
 
-RegisterKeyMapping('engine', Lang:t('info.engine'), 'keyboard', 'G')
-RegisterCommand('engine', function()
-    local vehicle = GetVehicle()
-    if vehicle and IsPedInVehicle(PlayerPedId(), vehicle) then
-        ToggleEngine(vehicle)
-    end
-end)
-
 AddEventHandler('onResourceStart', function(resourceName)
     if resourceName == GetCurrentResourceName() and Core.Functions.GetPlayerData() ~= {} then
         GetKeys()
@@ -191,12 +185,12 @@ AddEventHandler('onResourceStart', function(resourceName)
 end)
 
 -- Handles state right when the player selects their character and location.
-RegisterNetEvent('Core:Client:OnPlayerLoaded', function()
+AddEventHandler('Core:Client:OnPlayerLoaded', function()
     GetKeys()
 end)
 
 -- Resets state on logout, in case of character change.
-RegisterNetEvent('Core:Client:OnPlayerUnload', function()
+AddEventHandler('Core:Client:OnPlayerUnload', function()
     KeysList = {}
 end)
 
@@ -239,7 +233,8 @@ RegisterNetEvent('core:client:GiveKeys', function(id)
                 if IsPedSittingInVehicle(PlayerPedId(), targetVehicle) then -- Give keys to everyone in vehicle
                     local otherOccupants = GetOtherPlayersInVehicle(targetVehicle)
                     for p = 1, #otherOccupants do
-                        TriggerServerEvent('core:server:GiveVehicleKeys', GetPlayerServerId(NetworkGetPlayerIndexFromPed(otherOccupants[p])), targetPlate)
+                        TriggerServerEvent('core:server:GiveVehicleKeys',
+                            GetPlayerServerId(NetworkGetPlayerIndexFromPed(otherOccupants[p])), targetPlate)
                     end
                 else -- Give keys to closest player
                     GiveKeys(GetPlayerServerId(Core.Functions.GetClosestPlayer()), targetPlate)
@@ -273,7 +268,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
     if GetVehicleDoorLockStatus(vehicle) <= 0 then return end
 
     local difficulty = isAdvanced and 'easy' or 'medium' -- Easy for advanced lockpick, medium by default
-    local success = exports['qb-minigames']:Skillbar(difficulty)
+    local success = exports['bv-minigames']:Skillbar(difficulty)
 
     local chance = math.random()
     if success then
@@ -283,7 +278,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
         if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
             TriggerServerEvent('core:server:AcquireVehicleKeys', Core.Functions.GetPlate(vehicle))
         else
-            Core.Functions.Notify(Lang:t('notify.vlockpick'), 'success')
+            Core.Functions.Notify(Lang:t('carlocks.lockpick'), 'success')
             TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(vehicle), 1)
         end
     else
@@ -342,7 +337,8 @@ function ToggleVehicleLocks(veh)
                     end
 
                     Core.Functions.RequestAnimDict(Shared.LockToggleAnimation.AnimDict)
-                    TaskPlayAnim(ped, Shared.LockToggleAnimation.AnimDict, Shared.LockToggleAnimation.Anim, 8.0, -8.0, -1, 52, 0, false, false, false)
+                    TaskPlayAnim(ped, Shared.LockToggleAnimation.AnimDict, Shared.LockToggleAnimation.Anim, 8.0, -8.0, -1,
+                        52, 0, false, false, false)
                 end
 
                 Citizen.CreateThread(function()
@@ -360,11 +356,11 @@ function ToggleVehicleLocks(veh)
                 NetworkRequestControlOfEntity(veh)
                 if vehLockStatus == 1 then
                     TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(veh), 2)
-                    Core.Functions.Notify(Lang:t('notify.vlock'), 'primary')
+                    Core.Functions.Notify(Lang:t('carlocks.locked'), 'primary')
                     TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'lock', 1.0)
                 else
                     TriggerServerEvent('core:server:setVehLockState', NetworkGetNetworkIdFromEntity(veh), 1)
-                    Core.Functions.Notify(Lang:t('notify.vunlock'), 'success')
+                    Core.Functions.Notify(Lang:t('carlocks.unlocked'), 'success')
                     TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'unlock', 1.0)
                 end
 
@@ -425,6 +421,11 @@ end
 function AreKeysJobShared(veh)
     local vehName = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
     local vehPlate = Core.Functions.GetPlate(veh)
+    if not vehName or not vehPlate then return false end
+
+    local pData = Core.Functions.GetPlayerData()
+    if not pData or not pData.job then return false end
+
     local jobName = Core.Functions.GetPlayerData().job.name
     local onDuty = Core.Functions.GetPlayerData().job.onduty
     for job, v in pairs(Shared.SharedKeys) do
@@ -450,7 +451,8 @@ function ToggleVehicleTrunk(veh)
                 local ped = PlayerPedId()
                 local boot = GetEntityBoneIndexByName(GetVehiclePedIsIn(PlayerPedId(), false), 'boot')
                 Core.Functions.RequestAnimDict('anim@mp_player_intmenu@key_fob@')
-                TaskPlayAnim(ped, 'anim@mp_player_intmenu@key_fob@', 'fob_click', 3.0, 3.0, -1, 49, 0, false, false, false)
+                TaskPlayAnim(ped, 'anim@mp_player_intmenu@key_fob@', 'fob_click', 3.0, 3.0, -1, 49, 0, false, false,
+                    false)
                 TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 5, 'lock', 0.3)
                 NetworkRequestControlOfEntity(veh)
                 if boot ~= -1 or DoesEntityExist(veh) then
@@ -545,7 +547,7 @@ function Hotwire(vehicle, plate)
         if (math.random() <= Shared.HotwireChance) then
             TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
         else
-            Core.Functions.Notify(Lang:t('notify.fvlockpick'), 'error')
+            Core.Functions.Notify(Lang:t('carlocks.lockpick_failed'), 'error')
         end
         Wait(Shared.TimeBetweenHotwires)
         IsHotwiring = false
@@ -588,51 +590,52 @@ function CarjackVehicle(target)
             Wait(100)
         end
     end)
-    Core.Functions.Progressbar('rob_keys', Lang:t('progress.acjack'), Shared.CarjackingTime, false, true, {}, {}, {}, {}, function()
-        local hasWeapon, weaponHash = GetCurrentPedWeapon(PlayerPedId(), true)
-        if hasWeapon and isCarjacking then
-            local carjackChance
-            if Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))] then
-                carjackChance = Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))]
-            else
-                carjackChance = 0.5
-            end
-            if math.random() <= carjackChance then
-                local plate = Core.Functions.GetPlate(vehicle)
-                for p = 1, #occupants do
-                    local ped = occupants[p]
-                    CreateThread(function()
-                        FreezeEntityPosition(vehicle, false)
-                        SetVehicleUndriveable(vehicle, false)
-                        TaskLeaveVehicle(ped, vehicle, 0)
-                        PlayPain(ped, 6, 0)
-                        Wait(1250)
-                        ClearPedTasksImmediately(ped)
-                        PlayPain(ped, math.random(7, 8), 0)
-                        MakePedFlee(ped)
-                    end)
+    Core.Functions.Progressbar('rob_keys', Lang:t('progress.acjack'), Shared.CarjackingTime, false, true, {}, {}, {}, {},
+        function()
+            local hasWeapon, weaponHash = GetCurrentPedWeapon(PlayerPedId(), true)
+            if hasWeapon and isCarjacking then
+                local carjackChance
+                if Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))] then
+                    carjackChance = Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))]
+                else
+                    carjackChance = 0.5
                 end
-                TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
-                TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
-            else
-                Core.Functions.Notify(Lang:t('notify.cjackfail'), 'error')
-                FreezeEntityPosition(vehicle, false)
-                SetVehicleUndriveable(vehicle, false)
-                MakePedFlee(target)
-                TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+                if math.random() <= carjackChance then
+                    local plate = Core.Functions.GetPlate(vehicle)
+                    for p = 1, #occupants do
+                        local ped = occupants[p]
+                        CreateThread(function()
+                            FreezeEntityPosition(vehicle, false)
+                            SetVehicleUndriveable(vehicle, false)
+                            TaskLeaveVehicle(ped, vehicle, 0)
+                            PlayPain(ped, 6, 0)
+                            Wait(1250)
+                            ClearPedTasksImmediately(ped)
+                            PlayPain(ped, math.random(7, 8), 0)
+                            MakePedFlee(ped)
+                        end)
+                    end
+                    TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+                    TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
+                else
+                    Core.Functions.Notify(Lang:t('notify.cjackfail'), 'error')
+                    FreezeEntityPosition(vehicle, false)
+                    SetVehicleUndriveable(vehicle, false)
+                    MakePedFlee(target)
+                    TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+                end
+                isCarjacking = false
+                Wait(2000)
+                AttemptPoliceAlert('carjack')
+                Wait(Shared.DelayBetweenCarjackings)
+                canCarjack = true
             end
+        end, function()
+            MakePedFlee(target)
             isCarjacking = false
-            Wait(2000)
-            AttemptPoliceAlert('carjack')
             Wait(Shared.DelayBetweenCarjackings)
             canCarjack = true
-        end
-    end, function()
-        MakePedFlee(target)
-        isCarjacking = false
-        Wait(Shared.DelayBetweenCarjackings)
-        canCarjack = true
-    end)
+        end)
 end
 
 function AttemptPoliceAlert(type)
