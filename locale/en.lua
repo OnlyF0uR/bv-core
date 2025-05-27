@@ -124,6 +124,12 @@ local Translations = {
                 message = { name = 'message', help = 'Message to send' }
             },
         },
+        heal = {
+            help = 'Heal yourself or a player (Admin Only)',
+            params = {
+                id = { name = 'id', help = 'ID of player' },
+            },
+        }
     },
     weathersync = {
         weather = {
@@ -188,6 +194,7 @@ local Translations = {
         unlocked = 'Vehicle is now unlocked.',
         lockpicked = 'Successfully lockpicked the vehicle.',
         lockpick_failed = 'Lockpick failed, try again.',
+        getkeys = 'You received the keys for this vehicle.',
     }
 }
 

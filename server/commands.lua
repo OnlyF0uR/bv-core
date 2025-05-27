@@ -84,40 +84,40 @@ end
 Core.Commands.Add('tp', Lang:t('command.tp.help'),
     { { name = Lang:t('command.tp.params.x.name'), help = Lang:t('command.tp.params.x.help') }, { name = Lang:t('command.tp.params.y.name'), help = Lang:t('command.tp.params.y.help') }, { name = Lang:t('command.tp.params.z.name'), help = Lang:t('command.tp.params.z.help') } },
     false, function(source, args)
-    if args[1] and not args[2] and not args[3] then
-        if tonumber(args[1]) then
-            local target = GetPlayerPed(tonumber(args[1]))
-            if target ~= 0 then
-                local coords = GetEntityCoords(target)
-                TriggerClientEvent('Core:Command:TeleportToPlayer', source, coords)
+        if args[1] and not args[2] and not args[3] then
+            if tonumber(args[1]) then
+                local target = GetPlayerPed(tonumber(args[1]))
+                if target ~= 0 then
+                    local coords = GetEntityCoords(target)
+                    TriggerClientEvent('Core:Command:TeleportToPlayer', source, coords)
+                else
+                    TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+                end
             else
-                TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+                local location = Shared.Locations[args[1]]
+                if location then
+                    TriggerClientEvent('Core:Command:TeleportToCoords', source, location.x, location.y, location.z,
+                        location.w)
+                else
+                    TriggerClientEvent('Core:Notify', source, Lang:t('error.location_not_exist'), 'error')
+                end
             end
         else
-            local location = Shared.Locations[args[1]]
-            if location then
-                TriggerClientEvent('Core:Command:TeleportToCoords', source, location.x, location.y, location.z,
-                    location.w)
+            if args[1] and args[2] and args[3] then
+                local x = tonumber((args[1]:gsub(',', ''))) + .0
+                local y = tonumber((args[2]:gsub(',', ''))) + .0
+                local z = tonumber((args[3]:gsub(',', ''))) + .0
+                local heading = args[4] and tonumber((args[4]:gsub(',', ''))) + .0 or false
+                if x ~= 0 and y ~= 0 and z ~= 0 then
+                    TriggerClientEvent('Core:Command:TeleportToCoords', source, x, y, z, heading)
+                else
+                    TriggerClientEvent('Core:Notify', source, Lang:t('error.wrong_format'), 'error')
+                end
             else
-                TriggerClientEvent('Core:Notify', source, Lang:t('error.location_not_exist'), 'error')
+                TriggerClientEvent('Core:Notify', source, Lang:t('error.missing_args'), 'error')
             end
         end
-    else
-        if args[1] and args[2] and args[3] then
-            local x = tonumber((args[1]:gsub(',', ''))) + .0
-            local y = tonumber((args[2]:gsub(',', ''))) + .0
-            local z = tonumber((args[3]:gsub(',', ''))) + .0
-            local heading = args[4] and tonumber((args[4]:gsub(',', ''))) + .0 or false
-            if x ~= 0 and y ~= 0 and z ~= 0 then
-                TriggerClientEvent('Core:Command:TeleportToCoords', source, x, y, z, heading)
-            else
-                TriggerClientEvent('Core:Notify', source, Lang:t('error.wrong_format'), 'error')
-            end
-        else
-            TriggerClientEvent('Core:Notify', source, Lang:t('error.missing_args'), 'error')
-        end
-    end
-end, 'admin')
+    end, 'admin')
 
 Core.Commands.Add('tpm', Lang:t('command.tpm.help'), {}, false, function(source)
     TriggerClientEvent('Core:Command:GoToMarker', source)
@@ -128,31 +128,40 @@ Core.Commands.Add('togglepvp', Lang:t('command.togglepvp.help'), {}, false, func
     TriggerClientEvent('Core:Client:PvpHasToggled', -1, Core.Config.Server.PVP)
 end, 'admin')
 
+Core.Commands.Add('heal', Lang:t('command.heal.help'), {
+    { name = Lang:t('command.heal.params.id.name'), help = Lang:t('command.heal.params.id.help') }
+}, false, function(source, args)
+    local src = tonumber(args[1]) or source
+    local player = Core.Functions.GetPlayer(src)
+
+    player.Functions.Heal()
+end, 'admin')
+
 -- Permissions
 
 Core.Commands.Add('addpermission', Lang:t('command.addpermission.help'),
     { { name = Lang:t('command.addpermission.params.id.name'), help = Lang:t('command.addpermission.params.id.help') }, { name = Lang:t('command.addpermission.params.permission.name'), help = Lang:t('command.addpermission.params.permission.help') } },
     true, function(source, args)
-    local Player = Core.Functions.GetPlayer(tonumber(args[1]))
-    local permission = tostring(args[2]):lower()
-    if Player then
-        Core.Functions.AddPermission(Player.PlayerData.source, permission)
-    else
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
-    end
-end, 'god')
+        local Player = Core.Functions.GetPlayer(tonumber(args[1]))
+        local permission = tostring(args[2]):lower()
+        if Player then
+            Core.Functions.AddPermission(Player.PlayerData.source, permission)
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+        end
+    end, 'god')
 
 Core.Commands.Add('removepermission', Lang:t('command.removepermission.help'),
     { { name = Lang:t('command.removepermission.params.id.name'), help = Lang:t('command.removepermission.params.id.help') }, { name = Lang:t('command.removepermission.params.permission.name'), help = Lang:t('command.removepermission.params.permission.help') } },
     true, function(source, args)
-    local Player = Core.Functions.GetPlayer(tonumber(args[1]))
-    local permission = tostring(args[2]):lower()
-    if Player then
-        Core.Functions.RemovePermission(Player.PlayerData.source, permission)
-    else
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
-    end
-end, 'god')
+        local Player = Core.Functions.GetPlayer(tonumber(args[1]))
+        local permission = tostring(args[2]):lower()
+        if Player then
+            Core.Functions.RemovePermission(Player.PlayerData.source, permission)
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+        end
+    end, 'god')
 
 -- Open & Close Server
 
@@ -172,24 +181,24 @@ end, 'admin')
 Core.Commands.Add('closeserver', Lang:t('command.closeserver.help'),
     { { name = Lang:t('command.closeserver.params.reason.name'), help = Lang:t('command.closeserver.params.reason.help') } },
     false, function(source, args)
-    if Core.Config.Server.Closed then
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.server_already_closed'), 'error')
-        return
-    end
-    if Core.Functions.HasPermission(source, 'admin') then
-        local reason = args[1] or 'No reason specified'
-        Core.Config.Server.Closed = true
-        Core.Config.Server.ClosedReason = reason
-        for k in pairs(Core.Players) do
-            if not Core.Functions.HasPermission(k, Core.Config.Server.WhitelistPermission) then
-                Core.Functions.Kick(k, reason, nil, nil)
-            end
+        if Core.Config.Server.Closed then
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.server_already_closed'), 'error')
+            return
         end
-        TriggerClientEvent('Core:Notify', source, Lang:t('success.server_closed'), 'success')
-    else
-        Core.Functions.Kick(source, Lang:t('error.no_permission'), nil, nil)
-    end
-end, 'admin')
+        if Core.Functions.HasPermission(source, 'admin') then
+            local reason = args[1] or 'No reason specified'
+            Core.Config.Server.Closed = true
+            Core.Config.Server.ClosedReason = reason
+            for k in pairs(Core.Players) do
+                if not Core.Functions.HasPermission(k, Core.Config.Server.WhitelistPermission) then
+                    Core.Functions.Kick(k, reason, nil, nil)
+                end
+            end
+            TriggerClientEvent('Core:Notify', source, Lang:t('success.server_closed'), 'success')
+        else
+            Core.Functions.Kick(source, Lang:t('error.no_permission'), nil, nil)
+        end
+    end, 'admin')
 
 -- Vehicle
 
@@ -209,6 +218,48 @@ Core.Commands.Add('dvall', Lang:t('command.dvall.help'), {}, false, function()
         DeleteEntity(vehicle)
     end
 end, 'admin')
+
+-- Command for toggling vehicle extras
+Core.Commands.Add('extra', Lang:t('command.extra.help'),
+    { { name = Lang:t('command.extra.params.number.name'), help = Lang:t('command.extra.params.number.help') },
+        { name = Lang:t('command.extra.params.toggle.name'), help = Lang:t('command.extra.params.toggle.help') } },
+    false,
+    function(source, args)
+        local number = tonumber(args[1])
+        if number and number >= 0 and number < 15 then
+            local toggle = tonumber(args[2])
+            if toggle == 0 or toggle == 1 then
+                TriggerClientEvent('Core:Command:SetVehicleExtra', source, number, toggle)
+            else
+                TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_toggle'), 'error')
+            end
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_number'), 'error')
+        end
+    end, 'admin')
+
+-- Commands for setting a livery given a number
+Core.Commands.Add('livery', Lang:t('command.livery.help'),
+    { { name = Lang:t('command.livery.params.number.name'), help = Lang:t('command.livery.params.number.help') } }, false,
+    function(source, args)
+        local number = tonumber(args[1])
+        if number and number >= 0 then
+            TriggerClientEvent('Core:Command:SetLivery', source, number)
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_number'), 'error')
+        end
+    end, 'admin')
+
+Core.Commands.Add('oldlivery', Lang:t('command.livery.help'),
+    { { name = Lang:t('command.livery.params.number.name'), help = Lang:t('command.livery.params.number.help') } }, false,
+    function(source, args)
+        local number = tonumber(args[1])
+        if number and number >= 0 then
+            TriggerClientEvent('Core:Command:SetOldLivery', source, number)
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_number'), 'error')
+        end
+    end, 'admin')
 
 -- Peds
 
@@ -233,24 +284,24 @@ end, 'admin')
 Core.Commands.Add('givemoney', Lang:t('command.givemoney.help'),
     { { name = Lang:t('command.givemoney.params.id.name'), help = Lang:t('command.givemoney.params.id.help') }, { name = Lang:t('command.givemoney.params.moneytype.name'), help = Lang:t('command.givemoney.params.moneytype.help') }, { name = Lang:t('command.givemoney.params.amount.name'), help = Lang:t('command.givemoney.params.amount.help') } },
     true, function(source, args)
-    local Player = Core.Functions.GetPlayer(tonumber(args[1]))
-    if Player then
-        Player.Functions.AddMoney(tostring(args[2]), tonumber(args[3]), 'Admin give money')
-    else
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
-    end
-end, 'admin')
+        local Player = Core.Functions.GetPlayer(tonumber(args[1]))
+        if Player then
+            Player.Functions.AddMoney(tostring(args[2]), tonumber(args[3]), 'Admin give money')
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+        end
+    end, 'admin')
 
 Core.Commands.Add('setmoney', Lang:t('command.setmoney.help'),
     { { name = Lang:t('command.setmoney.params.id.name'), help = Lang:t('command.setmoney.params.id.help') }, { name = Lang:t('command.setmoney.params.moneytype.name'), help = Lang:t('command.setmoney.params.moneytype.help') }, { name = Lang:t('command.setmoney.params.amount.name'), help = Lang:t('command.setmoney.params.amount.help') } },
     true, function(source, args)
-    local Player = Core.Functions.GetPlayer(tonumber(args[1]))
-    if Player then
-        Player.Functions.SetMoney(tostring(args[2]), tonumber(args[3]))
-    else
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
-    end
-end, 'admin')
+        local Player = Core.Functions.GetPlayer(tonumber(args[1]))
+        if Player then
+            Player.Functions.SetMoney(tostring(args[2]), tonumber(args[3]))
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+        end
+    end, 'admin')
 
 -- Job
 
@@ -263,13 +314,13 @@ end, 'user')
 Core.Commands.Add('setjob', Lang:t('command.setjob.help'),
     { { name = Lang:t('command.setjob.params.id.name'), help = Lang:t('command.setjob.params.id.help') }, { name = Lang:t('command.setjob.params.job.name'), help = Lang:t('command.setjob.params.job.help') }, { name = Lang:t('command.setjob.params.grade.name'), help = Lang:t('command.setjob.params.grade.help') } },
     true, function(source, args)
-    local Player = Core.Functions.GetPlayer(tonumber(args[1]))
-    if Player then
-        Player.Functions.SetJob(tostring(args[2]), tonumber(args[3]))
-    else
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
-    end
-end, 'admin')
+        local Player = Core.Functions.GetPlayer(tonumber(args[1]))
+        if Player then
+            Player.Functions.SetJob(tostring(args[2]), tonumber(args[3]))
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+        end
+    end, 'admin')
 
 -- Gang
 
@@ -282,13 +333,13 @@ end, 'user')
 Core.Commands.Add('setgang', Lang:t('command.setgang.help'),
     { { name = Lang:t('command.setgang.params.id.name'), help = Lang:t('command.setgang.params.id.help') }, { name = Lang:t('command.setgang.params.gang.name'), help = Lang:t('command.setgang.params.gang.help') }, { name = Lang:t('command.setgang.params.grade.name'), help = Lang:t('command.setgang.params.grade.help') } },
     true, function(source, args)
-    local Player = Core.Functions.GetPlayer(tonumber(args[1]))
-    if Player then
-        Player.Functions.SetGang(tostring(args[2]), tonumber(args[3]))
-    else
-        TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
-    end
-end, 'admin')
+        local Player = Core.Functions.GetPlayer(tonumber(args[1]))
+        if Player then
+            Player.Functions.SetGang(tostring(args[2]), tonumber(args[3]))
+        else
+            TriggerClientEvent('Core:Notify', source, Lang:t('error.not_online'), 'error')
+        end
+    end, 'admin')
 
 -- Out of Character Chat
 Core.Commands.Add('ooc', Lang:t('command.ooc.help'), {}, false, function(source, args)

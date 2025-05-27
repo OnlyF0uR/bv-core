@@ -119,6 +119,12 @@ local Translations = {
                 message = { name = 'message', help = 'Bericht dat je wil versturen' }
             },
         },
+        heal = {
+            help = 'Heel jezelf of een speler (Alleen Admin)',
+            params = {
+                id = { name = 'id', help = 'Speler ID' },
+            },
+        }
     },
     weathersync = {
         weather = {
@@ -183,10 +189,11 @@ local Translations = {
         unlocked = 'Voertuig is nu open.',
         lockpicked = 'Voertuig successvol gelockpickt.',
         lockpick_failed = 'Lockpickpoging gefaald, probeer opnieuw.',
+        getkeys = 'Je hebt de sleutels voor dit voertuig ontvangen.',
     }
 }
 
-if GetConvar('qb_locale', 'en') == 'nl' then
+if GetConvar('bv_locale', 'en') == 'nl' then
     Lang = Locale:new({
         phrases = Translations,
         warnOnMissing = true,

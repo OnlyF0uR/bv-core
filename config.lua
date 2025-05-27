@@ -8,7 +8,7 @@ Config.StatusInterval = 5000                          -- how often to check hung
 Config.Money = {}
 Config.Money.MoneyTypes = { cash = 500, bank = 5000, crypto = 0 } -- type = startamount - Add or remove money types for your server (for ex. blackmoney = 0), remember once added it will not be removed from the database!
 Config.Money.DontAllowMinus = { 'cash', 'crypto' }                -- Money that is not allowed going in minus
-Config.Money.MinusLimit = -5000                                    -- The maximum amount you can be negative 
+Config.Money.MinusLimit = -5000                                   -- The maximum amount you can be negative
 Config.Money.PayCheckTimeOut = 10                                 -- The time in minutes that it will give the paycheck
 
 Config.Player = {}
@@ -103,16 +103,17 @@ Config.Player.PlayerDefaults = {
     items = {},
 }
 
-Config.Server = {}                                    -- General server config
-Config.Server.Closed = false                          -- Set server closed (no one can join except people with ace permission 'qbadmin.join')
-Config.Server.ClosedReason = 'Server Closed'          -- Reason message to display when people can't join the server
-Config.Server.Uptime = 0                              -- Time the server has been up.
-Config.Server.Whitelist = false                       -- Enable or disable whitelist on the server
-Config.Server.WhitelistPermission = 'admin'           -- Permission that's able to enter the server when the whitelist is on
-Config.Server.PVP = true                              -- Enable or disable pvp on the server (Ability to shoot other players)
-Config.Server.Discord = ''                            -- Discord invite link
-Config.Server.CheckDuplicateLicense = true            -- Check for duplicate rockstar license on join
+Config.Server = {}                             -- General server config
+Config.Server.Closed = false                   -- Set server closed (no one can join except people with ace permission 'bvadmin.join')
+Config.Server.ClosedReason = 'Server Closed'   -- Reason message to display when people can't join the server
+Config.Server.Uptime = 0                       -- Time the server has been up.
+Config.Server.Whitelist = false                -- Enable or disable whitelist on the server
+Config.Server.WhitelistPermission =
+'admin'                                        -- Permission that's able to enter the server when the whitelist is on
+Config.Server.PVP = true                       -- Enable or disable pvp on the server (Ability to shoot other players)
+Config.Server.Discord = ''                     -- Discord invite link
+Config.Server.CheckDuplicateLicense = true     -- Check for duplicate rockstar license on join
 Config.Server.Permissions = { 'admin', 'mod' } -- Add as many groups as you want here after creating them in your server.cfg
 
-Config.Commands = {}                                  -- Command Configuration
-Config.Commands.OOCColor = { 255, 151, 133 }          -- RGB color code for the OOC command
+Config.Commands = {}                           -- Command Configuration
+Config.Commands.OOCColor = { 255, 151, 133 }   -- RGB color code for the OOC command

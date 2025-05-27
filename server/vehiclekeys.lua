@@ -99,7 +99,7 @@ function GiveKeys(id, plate)
     oldKeys[plate] = true
     Player.Functions.SetMetaData("vehicleKeys", oldKeys)
 
-    TriggerClientEvent('Core:Notify', id, Lang:t('notify.vgetkeys'))
+    TriggerClientEvent('Core:Notify', id, Lang:t('carlocks.getkeys'))
     TriggerClientEvent('core:client:AddKeys', id, plate)
 end
 
@@ -143,28 +143,28 @@ exports('HasKeys', HasKeys)
 
 Core.Commands.Add('givekeys', Lang:t('addcom.givekeys'),
     { { name = Lang:t('addcom.givekeys_id'), help = Lang:t('addcom.givekeys_id_help') } }, false, function(source, args)
-    local src = source
-    TriggerClientEvent('core:client:GiveKeys', src, tonumber(args[1]))
-end)
+        local src = source
+        TriggerClientEvent('core:client:GiveKeys', src, tonumber(args[1]))
+    end)
 
 Core.Commands.Add('addkeys', Lang:t('addcom.addkeys'),
     { { name = Lang:t('addcom.addkeys_id'), help = Lang:t('addcom.addkeys_id_help') }, { name = Lang:t('addcom.addkeys_plate'), help = Lang:t('addcom.addkeys_plate_help') } },
     true, function(source, args)
-    local src = source
-    if not args[1] or not args[2] then
-        TriggerClientEvent('Core:Notify', src, Lang:t('notify.fpid'))
-        return
-    end
-    GiveKeys(tonumber(args[1]), args[2])
-end, 'admin')
+        local src = source
+        if not args[1] or not args[2] then
+            TriggerClientEvent('Core:Notify', src, Lang:t('notify.fpid'))
+            return
+        end
+        GiveKeys(tonumber(args[1]), args[2])
+    end, 'admin')
 
 Core.Commands.Add('removekeys', Lang:t('addcom.rkeys'),
     { { name = Lang:t('addcom.rkeys_id'), help = Lang:t('addcom.rkeys_id_help') }, { name = Lang:t('addcom.rkeys_plate'), help = Lang:t('addcom.rkeys_plate_help') } },
     true, function(source, args)
-    local src = source
-    if not args[1] or not args[2] then
-        TriggerClientEvent('Core:Notify', src, Lang:t('notify.fpid'))
-        return
-    end
-    RemoveKeys(tonumber(args[1]), args[2])
-end, 'admin')
+        local src = source
+        if not args[1] or not args[2] then
+            TriggerClientEvent('Core:Notify', src, Lang:t('notify.fpid'))
+            return
+        end
+        RemoveKeys(tonumber(args[1]), args[2])
+    end, 'admin')

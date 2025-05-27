@@ -17,6 +17,16 @@ RegisterNetEvent('Core:Client:PvpHasToggled', function(pvp_state)
     SetCanAttackFriendly(PlayerPedId(), pvp_state, false)
     NetworkSetFriendlyFireOption(pvp_state)
 end)
+
+RegisterNetEvent('Core:Client:HealPlayer', function()
+    local ped = PlayerPedId()
+    SetEntityHealth(ped, GetEntityMaxHealth(ped))
+    ClearPedBloodDamage(ped)
+    ClearPedTasksImmediately(ped)
+    ClearPedTasks(ped)
+    ClearPedSecondaryTask(ped)
+end)
+
 -- Teleport Commands
 
 RegisterNetEvent('Core:Command:TeleportToPlayer', function(coords)
@@ -156,6 +166,38 @@ RegisterNetEvent('Core:Command:DeleteVehicle', function()
                 DeleteVehicle(v)
             end
         end
+    end
+end)
+
+-- Core:Command:ToggleDecal
+RegisterNetEvent('Core:Command:SetVehicleExtra', function(id, value)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsUsing(ped)
+    if veh ~= 0 then
+        SetVehicleExtra(veh, id, value)
+    else
+        Core.Functions.Notify(Lang:t('error.no_vehicle'), 'error', 5000)
+    end
+end)
+
+-- Core:Command:SetLivery
+RegisterNetEvent('Core:Command:SetLivery', function(id)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsUsing(ped)
+    if veh ~= 0 then
+        SetVehicleMod(veh, 48, id, false)
+    else
+        Core.Functions.Notify(Lang:t('error.no_vehicle'), 'error', 5000)
+    end
+end)
+
+RegisterNetEvent('Core:Command:SetOldLivery', function(id)
+    local ped = PlayerPedId()
+    local veh = GetVehiclePedIsUsing(ped)
+    if veh ~= 0 then
+        SetVehicleLivery(veh, id)
+    else
+        Core.Functions.Notify(Lang:t('error.no_vehicle'), 'error', 5000)
     end
 end)
 

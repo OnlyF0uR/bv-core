@@ -180,7 +180,7 @@ function Core.Functions.Progressbar(name, label, duration, useWhileDead, canCanc
         error(
             'mythic_progbar needs to be started in order for Core.Functions.Progressbar to work')
     end
-    exports['progressbar']:Progress({
+    exports['mythic_progbar']:Progress({
         name = name:lower(),
         duration = duration,
         label = label,
@@ -200,6 +200,26 @@ function Core.Functions.Progressbar(name, label, duration, useWhileDead, canCanc
             end
         end
     end)
+end
+
+function Core.Functions.GetCarClass(vehicle)
+    local model = GetEntityModel(vehicle)
+
+    for i = 1, #Shared.Vehicles, 1 do
+        if GetHashKey(Shared.Vehicles[i].model) == model then
+            return Shared.Vehicles[i].category
+        end
+    end
+end
+
+function Core.Functions.HasVehicleHarness(vehicle)
+    local model = GetEntityModel(vehicle)
+
+    for i = 1, #Shared.Vehicles, 1 do
+        if GetHashKey(Shared.Vehicles[i].model) == model then
+            return Shared.Vehicles[i].harness
+        end
+    end
 end
 
 -- World Getters
@@ -451,16 +471,10 @@ function Core.Functions.GetVehicleProperties(vehicle)
             xenonColor = GetVehicleXenonLightsColor(vehicle)
         end
 
-
-        local class
-        if GetResourceState('bv-cars') ~= 'missing' then
-            class = exports['bv-cars']:GetCarClass(vehicle)
-        end
-
         return {
             model = GetEntityModel(vehicle),
             plate = Core.Functions.GetPlate(vehicle),
-            class = class,
+            class = Core.Functions.GetCarClass(vehicle),
             plateIndex = GetVehicleNumberPlateTextIndex(vehicle),
             bodyHealth = Core.Shared.Round(GetVehicleBodyHealth(vehicle), 0.1),
             engineHealth = Core.Shared.Round(GetVehicleEngineHealth(vehicle), 0.1),

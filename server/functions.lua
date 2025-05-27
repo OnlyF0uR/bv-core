@@ -126,10 +126,10 @@ function Core.Functions.GetPlayers()
     return sources
 end
 
----Will return an array of QB Player class instances
+---Will return an array of BV Player class instances
 ---unlike the GetPlayers() wrapper which only returns IDs
 ---@return table
-function Core.Functions.GetQBPlayers()
+function Core.Functions.GetBVPlayers()
     return Core.Players
 end
 

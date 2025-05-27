@@ -281,6 +281,16 @@ function Core.Player.CreatePlayer(PlayerData, Offline)
         self.Functions.UpdatePlayerData()
     end
 
+    function self.Functions.Heal()
+        if not self.Offline then
+            TriggerClientEvent('Core:Client:HealPlayer', self.PlayerData.source)
+        end
+        self.PlayerData.metadata.hunger = 100
+        self.PlayerData.metadata.thirst = 100
+        self.PlayerData.metadata.stress = 0
+        self.Functions.UpdatePlayerData()
+    end
+
     function self.Functions.GetMetaData(meta)
         if not meta or type(meta) ~= 'string' then return end
         return self.PlayerData.metadata[meta]

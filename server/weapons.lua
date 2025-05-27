@@ -33,7 +33,7 @@ Core.Functions.CreateCallback('core-weapons:server:RepairWeapon', function(src, 
     local Player = Core.Functions.GetPlayer(src)
     local minute = 60 * 1000
     local Timeout = math.random(5 * minute, 10 * minute)
-    local WeaponData = Core.Shared.Weapons[GetHashKey(data.name)]
+    local WeaponData = Core.Shared.Weapons.List[GetHashKey(data.name)]
     local WeaponClass = (Core.Shared.SplitStr(WeaponData.ammotype, '_')[2]):lower()
 
     if not Player then
@@ -106,7 +106,7 @@ Core.Functions.CreateCallback('prison:server:checkThrowable', function(src, cb, 
     if not Player then return cb(false) end
     local throwable = false
     for _, v in pairs(Shared.Weapons.Throwables) do
-        if Core.Shared.Weapons[weapon].name == 'weapon_' .. v then
+        if Core.Shared.Weapons.List[weapon].name == 'weapon_' .. v then
             if not exports['bv-inventory']:RemoveItem(src, 'weapon_' .. v, 1, false, 'prison:server:checkThrowable') then
                 return
                     cb(false)
@@ -158,7 +158,7 @@ end)
 RegisterNetEvent('core-weapons:server:UpdateWeaponQuality', function(data, RepeatAmount)
     local src = source
     local Player = Core.Functions.GetPlayer(src)
-    local WeaponData = Core.Shared.Weapons[GetHashKey(data.name)]
+    local WeaponData = Core.Shared.Weapons.List[GetHashKey(data.name)]
     local WeaponSlot = Player.PlayerData.items[data.slot]
     local DecreaseAmount = Shared.Weapons.DurabilityMultiplier[data.name]
     if WeaponSlot then
@@ -227,7 +227,7 @@ local function GetWeaponSlotByName(items, weaponName)
 end
 
 local function IsMK2Weapon(weaponHash)
-    local weaponName = Core.Shared.Weapons[weaponHash]['name']
+    local weaponName = Core.Shared.Weapons.List[weaponHash]['name']
     return string.find(weaponName, 'mk2') ~= nil
 end
 
@@ -243,7 +243,7 @@ local function EquipWeaponTint(src, tintIndex, item, isMK2)
         return
     end
 
-    local weaponName = Core.Shared.Weapons[selectedWeaponHash].name
+    local weaponName = Core.Shared.Weapons.List[selectedWeaponHash].name
     if not weaponName then return end
 
     if isMK2 and not IsMK2Weapon(selectedWeaponHash) then
@@ -302,7 +302,7 @@ local function EquipWeaponAttachment(src, item)
     local ped = GetPlayerPed(src)
     local selectedWeaponHash = GetSelectedPedWeapon(ped)
     if selectedWeaponHash == `WEAPON_UNARMED` then return end
-    local weaponName = Core.Shared.Weapons[selectedWeaponHash].name
+    local weaponName = Core.Shared.Weapons.List[selectedWeaponHash].name
     if not weaponName then return end
     local attachmentComponent = DoesWeaponTakeWeaponComponent(item, weaponName)
     if not attachmentComponent then

@@ -39,6 +39,7 @@ client_scripts {
     'client/holograms.lua',
     'client/postalcodes.lua',
     'client/dev.lua',
+    'client/drawtext.lua'
 }
 
 server_scripts {
