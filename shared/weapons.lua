@@ -181,7 +181,7 @@ Shared.Weapons.WeapDraw = {
 	}
 }
 
-Shared.Weapons.ReloadTime = math.random(4000, 6000)
+Shared.Weapons.ReloadTime = math.random(1750, 3000)
 
 Shared.Weapons.DurabilityBlockedWeapons = {
 	'weapon_stungun',

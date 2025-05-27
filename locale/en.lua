@@ -195,6 +195,12 @@ local Translations = {
         lockpicked = 'Successfully lockpicked the vehicle.',
         lockpick_failed = 'Lockpick failed, try again.',
         getkeys = 'You received the keys for this vehicle.',
+    },
+    weapons = {
+        reloading = 'Reloading',
+        reload_success = 'Reloaded',
+        reload_failed = 'Reload failed',
+        wrong_ammo = 'You can\'t reload this weapon with this ammo',
     }
 }
 

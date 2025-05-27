@@ -190,6 +190,12 @@ local Translations = {
         lockpicked = 'Voertuig successvol gelockpickt.',
         lockpick_failed = 'Lockpickpoging gefaald, probeer opnieuw.',
         getkeys = 'Je hebt de sleutels voor dit voertuig ontvangen.',
+    },
+    weapons = {
+        reloading = 'Herladen',
+        reload_success = 'Wapen herladen',
+        reload_failed = 'Herladen mislukt',
+        wrong_ammo = 'Je kunt dit wapen niet herladen met deze munitie',
     }
 }
 

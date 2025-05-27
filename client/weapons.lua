@@ -70,17 +70,17 @@ RegisterNetEvent('core-weapons:client:AddAmmo', function(ammoType, amount, itemD
     local weapon = GetSelectedPedWeapon(ped)
 
     if not CurrentWeaponData then
-        Core.Functions.Notify(Lang:t('error.no_weapon'), 'error')
+        Core.Functions.Notify(Lang:t('weapons.no_weapon'), 'error')
         return
     end
 
     if Core.Shared.Weapons.List[weapon]['name'] == 'weapon_unarmed' then
-        Core.Functions.Notify(Lang:t('error.no_weapon_in_hand'), 'error')
+        Core.Functions.Notify(Lang:t('weapons.no_weapon_in_hand'), 'error')
         return
     end
 
     if Core.Shared.Weapons.List[weapon]['ammotype'] ~= ammoType:upper() then
-        Core.Functions.Notify(Lang:t('error.wrong_ammo'), 'error')
+        Core.Functions.Notify(Lang:t('weapons.wrong_ammo'), 'error')
         return
     end
 
@@ -88,21 +88,21 @@ RegisterNetEvent('core-weapons:client:AddAmmo', function(ammoType, amount, itemD
     local _, maxAmmo = GetMaxAmmo(ped, weapon)
 
     if total >= maxAmmo then
-        Core.Functions.Notify(Lang:t('error.max_ammo'), 'error')
+        Core.Functions.Notify(Lang:t('weapons.max_ammo'), 'error')
         return
     end
 
-    Core.Functions.Progressbar('taking_bullets', Lang:t('info.loading_bullets'), Shared.Weapons.ReloadTime, false, true,
+    Core.Functions.Progressbar('taking_bullets', Lang:t('weapons.reloading'), Shared.Weapons.ReloadTime, false, true,
         {
             disableMovement = false,
             disableCarMovement = false,
             disableMouse = false,
             disableCombat = true,
-        }, {}, {}, {}, function()              -- Done
+        }, nil, nil, function()                -- Done
             weapon = GetSelectedPedWeapon(ped) -- Get weapon at time of completion
 
             if Core.Shared.Weapons.List[weapon]?.ammotype ~= ammoType then
-                return Core.Functions.Notify(Lang:t('error.wrong_ammo'), 'error')
+                return Core.Functions.Notify(Lang:t('weapons.wrong_ammo'), 'error')
             end
 
             AddAmmoToPed(ped, weapon, amount)
@@ -110,9 +110,9 @@ RegisterNetEvent('core-weapons:client:AddAmmo', function(ammoType, amount, itemD
             TriggerServerEvent('core-weapons:server:UpdateWeaponAmmo', CurrentWeaponData, total + amount)
             TriggerServerEvent('core-weapons:server:removeWeaponAmmoItem', itemData)
             TriggerEvent('bv-inventory:client:ItemBox', Core.Shared.Items[itemData.name], 'remove')
-            TriggerEvent('Core:Notify', Lang:t('success.reloaded'), 'success')
+            TriggerEvent('Core:Notify', Lang:t('weapons.reload_success'), 'success')
         end, function()
-            Core.Functions.Notify(Lang:t('error.canceled'), 'error')
+            Core.Functions.Notify(Lang:t('weapons.reload_failed'), 'error')
         end)
 end)
 
