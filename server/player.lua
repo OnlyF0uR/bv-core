@@ -251,7 +251,21 @@ function Core.Player.CreatePlayer(PlayerData, Offline)
     end
 
     function self.Functions.HasItem(items, amount)
-        return Core.Functions.HasItem(self.PlayerData.source, items, amount)
+        if GetResourceState('bv-inventory') == 'missing' then return end
+        return exports['bv-inventory']:HasItem(self.PlayerData.source, items, amount)
+    end
+
+    function self.Functions.GetItemByName(itemName)
+        if GetResourceState('bv-inventory') == 'missing' then return end
+        if not itemName or type(itemName) ~= 'string' then return end
+        return exports['bv-inventory']:GetItemByName(self.PlayerData.source, itemName)
+    end
+
+    function self.Functions.RemoveItem(itemName, amount, slot)
+        if GetResourceState('bv-inventory') == 'missing' then return end
+        if not itemName or type(itemName) ~= 'string' then return end
+        if not amount or type(amount) ~= 'number' then return end
+        return exports['bv-inventory']:RemoveItem(self.PlayerData.source, itemName, amount, slot)
     end
 
     function self.Functions.GetName()

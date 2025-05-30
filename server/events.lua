@@ -175,10 +175,10 @@ RegisterNetEvent('Core:ToggleDuty', function()
     if not Player then return end
     if Player.PlayerData.job.onduty then
         Player.Functions.SetJobDuty(false)
-        TriggerClientEvent('Core:Notify', src, Lang:t('info.off_duty'))
+        TriggerClientEvent('Core:Notify', src, Lang:t('info.off_duty'), 'inform')
     else
         Player.Functions.SetJobDuty(true)
-        TriggerClientEvent('Core:Notify', src, Lang:t('info.on_duty'))
+        TriggerClientEvent('Core:Notify', src, Lang:t('info.on_duty'), 'inform')
     end
 
     TriggerEvent('Core:Server:SetDuty', src, Player.PlayerData.job.onduty)
@@ -227,30 +227,6 @@ RegisterServerEvent('baseevents:leftVehicle', function(veh, seat, modelName)
 end)
 
 -- Items
-
--- This event is exploitable and should not be used. It has been deprecated, and will be removed soon.
-RegisterNetEvent('Core:Server:UseItem', function(item)
-    print(string.format(
-        '%s triggered Core:Server:UseItem by ID %s with the following data. This event is deprecated due to exploitation, and will be removed soon. Check bv-inventory for the right use on this event.',
-        GetInvokingResource(), source))
-    Core.Debug(item)
-end)
-
--- This event is exploitable and should not be used. It has been deprecated, and will be removed soon. function(itemName, amount, slot)
-RegisterNetEvent('Core:Server:RemoveItem', function(itemName, amount)
-    local src = source
-    print(string.format(
-        '%s triggered Core:Server:RemoveItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.',
-        GetInvokingResource(), src, amount, itemName))
-end)
-
--- This event is exploitable and should not be used. It has been deprecated, and will be removed soon. function(itemName, amount, slot, info)
-RegisterNetEvent('Core:Server:AddItem', function(itemName, amount)
-    local src = source
-    print(string.format(
-        '%s triggered Core:Server:AddItem by ID %s for %s %s. This event is deprecated due to exploitation, and will be removed soon. Adjust your events accordingly to do this server side with player functions.',
-        GetInvokingResource(), src, amount, itemName))
-end)
 
 -- Non-Chat Command Calling (ex: bv-adminmenu)
 

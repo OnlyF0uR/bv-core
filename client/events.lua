@@ -145,6 +145,11 @@ RegisterNetEvent('Core:Command:SpawnVehicle', function(vehName)
 
     local vehicle = CreateVehicle(hash, GetEntityCoords(ped), GetEntityHeading(ped), true, false)
     TaskWarpPedIntoVehicle(ped, vehicle, -1)
+
+    if GetResourceState('bv-carhud') ~= 'missing' then
+        exports['bv-carhud']:SetSeatbeltOn(true)
+    end
+
     SetVehicleFuelLevel(vehicle, 100.0)
     SetVehicleDirtLevel(vehicle, 0.0)
     SetModelAsNoLongerNeeded(hash)

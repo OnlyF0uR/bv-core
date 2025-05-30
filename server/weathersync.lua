@@ -321,33 +321,29 @@ CreateThread(function()
     local realTimeFromApi = nil
     local failedCount = 0
 
-    while true do
-        Wait(60000)                                           -- ⏱️ Sync server time every 1 minute with real time API. Falls back to OS time if failed.
-        local newBaseTime = os.time(os.date("!*t")) / 2 + 360 --Set the server time depending of OS time
-        if Shared.WeatherSync.RealTimeSync then
-            retrieveTimeFromApi(function(unixTime)
-                if unixTime then
-                    baseTime = unixTime
-                else
-                    baseTime = os.time(os.date("!*t"))
-                end
-            end)
-        else
-            baseTime = os.time(os.date("!*t")) / 2 + 360
-        end
+    if Shared.WeatherSync.RealTimeSync then
+        retrieveTimeFromApi(function(unixTime)
+            if unixTime then
+                baseTime = unixTime
+            else
+                baseTime = os.time(os.date("!*t"))
+            end
+        end)
+    else
+        baseTime = os.time(os.date("!*t")) / 2 + 360
     end
-end)
 
-CreateThread(function()
     while true do
-        Wait(2000) --Change to send every minute in game sync
+        Wait(2000) -- Increase baseTime every 2 seconds
+        baseTime = baseTime + 2
+
         TriggerClientEvent('bv-weathersync:client:SyncTime', -1, baseTime, timeOffset, freezeTime)
     end
 end)
 
 CreateThread(function()
     while true do
-        Wait(300000)
+        Wait(300000) -- Check every 5 minutes
         TriggerClientEvent('bv-weathersync:client:SyncWeather', -1, CurrentWeather, blackout)
     end
 end)

@@ -1,9 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-author 'Kakarot (QB-Core), OnlyF0uR'
-description 'Core resource for the framework, adapted from QB-Core'
-version '1.0.0'
 
 local postalFile = "client/postals.json"
 
@@ -39,7 +36,8 @@ client_scripts {
     'client/holograms.lua',
     'client/postalcodes.lua',
     'client/dev.lua',
-    'client/drawtext.lua'
+    'client/drawtext.lua',
+    'client/tackle.lua',
 }
 
 server_scripts {
@@ -55,6 +53,8 @@ server_scripts {
     'server/weathersync.lua',
     'server/weapons.lua',
     'server/dev.lua',
+    'server/peds.lua',
+    'server/tackle.lua',
 }
 
 file(postalFile)

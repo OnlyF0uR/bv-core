@@ -590,52 +590,56 @@ function CarjackVehicle(target)
             Wait(100)
         end
     end)
-    Core.Functions.Progressbar('rob_keys', Lang:t('progress.acjack'), Shared.CarjackingTime, false, true, {}, {}, {}, {},
-        function()
-            local hasWeapon, weaponHash = GetCurrentPedWeapon(PlayerPedId(), true)
-            if hasWeapon and isCarjacking then
-                local carjackChance
-                if Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))] then
-                    carjackChance = Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))]
-                else
-                    carjackChance = 0.5
-                end
-                if math.random() <= carjackChance then
-                    local plate = Core.Functions.GetPlate(vehicle)
-                    for p = 1, #occupants do
-                        local ped = occupants[p]
-                        CreateThread(function()
-                            FreezeEntityPosition(vehicle, false)
-                            SetVehicleUndriveable(vehicle, false)
-                            TaskLeaveVehicle(ped, vehicle, 0)
-                            PlayPain(ped, 6, 0)
-                            Wait(1250)
-                            ClearPedTasksImmediately(ped)
-                            PlayPain(ped, math.random(7, 8), 0)
-                            MakePedFlee(ped)
-                        end)
-                    end
-                    TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
-                    TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
-                else
-                    Core.Functions.Notify(Lang:t('notify.cjackfail'), 'error')
-                    FreezeEntityPosition(vehicle, false)
-                    SetVehicleUndriveable(vehicle, false)
-                    MakePedFlee(target)
-                    TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
-                end
-                isCarjacking = false
-                Wait(2000)
-                AttemptPoliceAlert('carjack')
-                Wait(Shared.DelayBetweenCarjackings)
-                canCarjack = true
+    Core.Functions.Progressbar('rob_keys', Lang:t('progress.acjack'), Shared.CarjackingTime, false, true, {
+        disableMovement = false,
+        disableCarMovement = false,
+        disableMouse = false,
+        disableCombat = false,
+    }, nil, nil, function()
+        local hasWeapon, weaponHash = GetCurrentPedWeapon(PlayerPedId(), true)
+        if hasWeapon and isCarjacking then
+            local carjackChance
+            if Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))] then
+                carjackChance = Shared.CarjackChance[tostring(GetWeapontypeGroup(weaponHash))]
+            else
+                carjackChance = 0.5
             end
-        end, function()
-            MakePedFlee(target)
+            if math.random() <= carjackChance then
+                local plate = Core.Functions.GetPlate(vehicle)
+                for p = 1, #occupants do
+                    local ped = occupants[p]
+                    CreateThread(function()
+                        FreezeEntityPosition(vehicle, false)
+                        SetVehicleUndriveable(vehicle, false)
+                        TaskLeaveVehicle(ped, vehicle, 0)
+                        PlayPain(ped, 6, 0)
+                        Wait(1250)
+                        ClearPedTasksImmediately(ped)
+                        PlayPain(ped, math.random(7, 8), 0)
+                        MakePedFlee(ped)
+                    end)
+                end
+                TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+                TriggerServerEvent('core:server:AcquireVehicleKeys', plate)
+            else
+                Core.Functions.Notify(Lang:t('notify.cjackfail'), 'error')
+                FreezeEntityPosition(vehicle, false)
+                SetVehicleUndriveable(vehicle, false)
+                MakePedFlee(target)
+                TriggerServerEvent('hud:server:GainStress', math.random(1, 4))
+            end
             isCarjacking = false
+            Wait(2000)
+            AttemptPoliceAlert('carjack')
             Wait(Shared.DelayBetweenCarjackings)
             canCarjack = true
-        end)
+        end
+    end, function()
+        MakePedFlee(target)
+        isCarjacking = false
+        Wait(Shared.DelayBetweenCarjackings)
+        canCarjack = true
+    end)
 end
 
 function AttemptPoliceAlert(type)

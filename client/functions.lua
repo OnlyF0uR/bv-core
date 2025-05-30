@@ -48,6 +48,10 @@ function Core.Functions.HasItem(items, amount)
     return exports['bv-inventory']:HasItem(items, amount)
 end
 
+function Core.Functions.GetQuantity(item)
+    return exports['bv-inventory']:GetQuantity(item)
+end
+
 ---Returns the full character name
 ---@return string
 function Core.Functions.GetName()
@@ -208,6 +212,16 @@ function Core.Functions.GetCarClass(vehicle)
     for i = 1, #Shared.Vehicles, 1 do
         if GetHashKey(Shared.Vehicles[i].model) == model then
             return Shared.Vehicles[i].category
+        end
+    end
+end
+
+function Core.Functions.GetVehicleModelname(vehicle)
+    local model = GetEntityModel(vehicle)
+
+    for i = 1, #Shared.Vehicles, 1 do
+        if GetHashKey(Shared.Vehicles[i].model) == model then
+            return Shared.Vehicles[i].model
         end
     end
 end
@@ -597,6 +611,9 @@ function Core.Functions.SetVehicleProperties(vehicle, props)
             SetVehiclePetrolTankHealth(vehicle, props.tankHealth + 0.0)
         end
         if props.fuelLevel then
+            if GetResourceState('LegacyFuel') ~= 'missing' then
+                exports['LegacyFuel']:SetFuel(vehicle, props.fuelLevel + 0.0)
+            end
             SetVehicleFuelLevel(vehicle, props.fuelLevel + 0.0)
         end
         if props.dirtLevel then

@@ -219,48 +219,6 @@ Core.Commands.Add('dvall', Lang:t('command.dvall.help'), {}, false, function()
     end
 end, 'admin')
 
--- Command for toggling vehicle extras
-Core.Commands.Add('extra', Lang:t('command.extra.help'),
-    { { name = Lang:t('command.extra.params.number.name'), help = Lang:t('command.extra.params.number.help') },
-        { name = Lang:t('command.extra.params.toggle.name'), help = Lang:t('command.extra.params.toggle.help') } },
-    false,
-    function(source, args)
-        local number = tonumber(args[1])
-        if number and number >= 0 and number < 15 then
-            local toggle = tonumber(args[2])
-            if toggle == 0 or toggle == 1 then
-                TriggerClientEvent('Core:Command:SetVehicleExtra', source, number, toggle)
-            else
-                TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_toggle'), 'error')
-            end
-        else
-            TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_number'), 'error')
-        end
-    end, 'admin')
-
--- Commands for setting a livery given a number
-Core.Commands.Add('livery', Lang:t('command.livery.help'),
-    { { name = Lang:t('command.livery.params.number.name'), help = Lang:t('command.livery.params.number.help') } }, false,
-    function(source, args)
-        local number = tonumber(args[1])
-        if number and number >= 0 then
-            TriggerClientEvent('Core:Command:SetLivery', source, number)
-        else
-            TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_number'), 'error')
-        end
-    end, 'admin')
-
-Core.Commands.Add('oldlivery', Lang:t('command.livery.help'),
-    { { name = Lang:t('command.livery.params.number.name'), help = Lang:t('command.livery.params.number.help') } }, false,
-    function(source, args)
-        local number = tonumber(args[1])
-        if number and number >= 0 then
-            TriggerClientEvent('Core:Command:SetOldLivery', source, number)
-        else
-            TriggerClientEvent('Core:Notify', source, Lang:t('error.invalid_number'), 'error')
-        end
-    end, 'admin')
-
 -- Peds
 
 Core.Commands.Add('dvp', Lang:t('command.dvp.help'), {}, false, function()

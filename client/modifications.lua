@@ -14,6 +14,25 @@ local suppressedModels = {
 	"POLICEB",  -- Regularily spawns on MRPD
 }
 
+local gates = {
+	'p_barier_test_s',
+	'prop_sec_barier_01a',
+	'prop_sec_barier_02a',
+	'prop_sec_barier_02b',
+	'prop_sec_barier_03a',
+	'prop_sec_barier_03b',
+	'prop_sec_barier_04a',
+	'prop_sec_barier_04b',
+	'prop_sec_barier_base_01',
+	'prop_sec_barrier_ld_01a',
+	'prop_sec_barrier_ld_02a',
+	'prop_gate_airport_01',
+	'prop_facgate_01',
+	'prop_facgate_03_l',
+	'prop_facgate_03_r',
+	'prop_gate_docks_ld'
+}
+
 local disableControls = Shared.Controls.Disable.controls
 local displayAmmo = Shared.Controls.Disable.displayAmmo
 
@@ -155,6 +174,24 @@ Citizen.CreateThread(function()
 		until not finished
 
 		EndFindPed(handle)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Wait(1000)
+
+		-- ==========================================
+		-- Disable Gates
+		-- ==========================================
+		for _, gate in next, gates do
+			local gateObj = GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 100.0, GetHashKey(gate), false, false, false)
+			if DoesEntityExist(gateObj) then
+				SetEntityAsMissionEntity(gateObj, true, true)
+				DeleteObject(gateObj)
+				SetEntityAsNoLongerNeeded(gateObj)
+			end
+		end
 	end
 end)
 

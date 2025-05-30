@@ -687,16 +687,6 @@ end
 
 -- Utility functions
 
----Check if a player has an item [deprecated]
----@param source any
----@param items table|string
----@param amount number
----@return boolean
-function Core.Functions.HasItem(source, items, amount)
-    if GetResourceState('bv-inventory') == 'missing' then return end
-    return exports['bv-inventory']:HasItem(source, items, amount)
-end
-
 ---Notify
 ---@param source any
 ---@param text string

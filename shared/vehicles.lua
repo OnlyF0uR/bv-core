@@ -353,6 +353,7 @@ Shared.Vehicles = {
     { model = 'pipistrello',     name = 'Pipistrello',                   brand = 'Overflod',        price = 240000,  category = 'sports',         type = 'automobile', shop = 'luxury', harness = false },
     { model = 'niobe',           name = 'Niobe',                         brand = 'Ubermacht',       price = 180000,  category = 'sports',         type = 'automobile', shop = 'luxury', harness = false },
     { model = 'driftvorschlag',  name = 'Vorschlaghammer',               brand = 'Pfister',         price = 250000,  category = 'sports',         type = 'automobile', shop = 'luxury', harness = false },
+    { model = 'sunriser',        name = 'Sunrise R',                     brand = 'Maibatsu',        price = 145000,  category = 'sports',         type = 'automobile', shop = 'luxury', harness = false },
     --- Super (7)
     { model = 'adder',           name = 'Adder',                         brand = 'Truffade',        price = 280000,  category = 'super',          type = 'automobile', shop = 'luxury', harness = false },
     { model = 'autarch',         name = 'Autarch',                       brand = 'Överflöd',        price = 224000,  category = 'super',          type = 'automobile', shop = 'luxury', harness = false },
@@ -692,35 +693,44 @@ Shared.Vehicles = {
     { model = 'riot',            name = 'Police Riot',                   brand = 'Brute',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
     { model = 'riot2',           name = 'RCV',                           brand = 'Unknown',         price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
     { model = 'pbus',            name = 'Police Prison Bus',             brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'police',          name = 'Police Cruiser',                brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'police2',         name = 'Police Buffalo',                brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'police3',         name = 'Police Interceptor',            brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'police4',         name = 'Unmarked Cruiser',              brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'sheriff',         name = 'Sheriff SUV',                   brand = 'Declasse',        price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'sheriff2',        name = 'Sheriff Cruiser',               brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'policeold1',      name = 'Police Rancher',                brand = 'Declasse',        price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'policeold2',      name = 'Police Roadcruiser',            brand = 'Albany',          price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'policet',         name = 'Police Transporter',            brand = 'Vapid',           price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'policeb',         name = 'Police Bike',                   brand = 'Vapid',           price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'police',          name = 'Police Cruiser',                brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'police2',         name = 'Police Buffalo',                brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'police3',         name = 'Police Interceptor',            brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'police4',         name = 'Detective Cruiser',             brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'sheriff',         name = 'Sheriff SUV',                   brand = 'Declasse',        price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'sheriff2',        name = 'Sheriff Cruiser',               brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'policeold1',      name = 'Police Rancher',                brand = 'Declasse',        price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'policeold2',      name = 'Police Roadcruiser',            brand = 'Albany',          price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'policet',         name = 'Police Transporter',            brand = 'Vapid',           price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'policeb',         name = 'Police Bike',                   brand = 'Vapid',           price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
     { model = 'polmav',          name = 'Police Maverick',               brand = 'Buckingham',      price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
     { model = 'ambulance',       name = 'Ambulance',                     brand = 'Brute',           price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
     { model = 'firetruk',        name = 'Fire Truck',                    brand = 'MTL',             price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'lguard',          name = 'Lifeguard',                     brand = 'Declasse',        price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'seashark2',       name = 'Seashark Lifeguard',            brand = 'Speedophile',     price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'pranger',         name = 'Park Ranger',                   brand = 'Declasse',        price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'fbi',             name = 'FIB Buffalo',                   brand = 'Bravado',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'fbi2',            name = 'FIB Granger',                   brand = 'Declasse',        price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'predator',        name = 'Police Predator',               brand = 'Unknown',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'polgauntlet',     name = 'Gauntlet Interceptor',          brand = 'Bravado',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'police5',         name = 'Stanier LE Cruiser',            brand = 'Vapid',           price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'polimpaler5',     name = 'Impaler SZ Cruiser',            brand = 'Declasse',        price = 80000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'polimpaler6',     name = 'Impaler LX Cruiser',            brand = 'Declasse',        price = 90000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'poldominator10',  name = 'Dominator FX Interceptor',      brand = 'Vapid',           price = 230000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'policet3',        name = 'Burrito (Bail Enforcement)',    brand = 'Declasse',        price = 60000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'polgreenwood',    name = 'Greenwood Cruiser',             brand = 'Bravado',         price = 80000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'poldorado',       name = 'Dorado Cruiser',                brand = 'Vapid',           price = 80000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
-    { model = 'polchar',         name = 'QR-Charger',                    brand = 'Dodge',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
-    { model = '2015polstang',    name = 'Trooper Mustang',               brand = 'Ford',            price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    -- { model = 'lguard',          name = 'Lifeguard',                     brand = 'Declasse',        price = 110000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'seashark2',       name = 'Seashark Lifeguard',            brand = 'Speedophile',     price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'pranger',         name = 'Park Ranger',                   brand = 'Declasse',        price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'fbi',             name = 'FIB Buffalo',                   brand = 'Bravado',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'fbi2',            name = 'FIB Granger',                   brand = 'Declasse',        price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'predator',        name = 'Police Predator',               brand = 'Unknown',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'polgauntlet',     name = 'Gauntlet Interceptor',          brand = 'Bravado',         price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'police5',         name = 'Stanier LE Cruiser',            brand = 'Vapid',           price = 40000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'polimpaler5',     name = 'Impaler SZ Cruiser',            brand = 'Declasse',        price = 80000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'polimpaler6',     name = 'Impaler LX Cruiser',            brand = 'Declasse',        price = 90000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'poldominator10',  name = 'Dominator FX Interceptor',      brand = 'Vapid',           price = 230000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'policet3',        name = 'Burrito (Bail Enforcement)',    brand = 'Declasse',        price = 60000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'polgreenwood',    name = 'Greenwood Cruiser',             brand = 'Bravado',         price = 80000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    -- { model = 'poldorado',       name = 'Dorado Cruiser',                brand = 'Vapid',           price = 80000,   category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    { model = 'umbuf4bb',        name = 'Unmarked Buffalo (BB)',         brand = 'Bravado',         price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    { model = 'umbuf4rb',        name = 'Unmarked Buffalo (RB)',         brand = 'Bravado',         price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    { model = 'polgauntletr',    name = 'BC Gauntlet',                   brand = 'Bravado',         price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    { model = 'polvigeror',      name = 'BC Vigero',                     brand = 'Declasse',        price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    { model = 'poldmntr2',       name = 'BC Dominator2',                 brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    { model = 'polbuffalor',     name = 'BC Buffalo',                    brand = 'Bravado',         price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    { model = 'polcoquetter',    name = 'BC Coquette',                   brand = 'Invetero',        price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = true },
+    { model = 'polscoutr',       name = 'BC Scout',                      brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    { model = 'polspeedor',      name = 'BC Speedor',                    brand = 'Vapid',           price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    { model = 'polbisonr',       name = 'BC Bison',                      brand = 'Bravado',         price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
+    { model = 'polalamor2',      name = 'BC Alamor2',                    brand = 'Declasse',        price = 100000,  category = 'emergency',      type = 'automobile', shop = 'none',   harness = false },
     --- Military (19)
     { model = 'vetir',           name = 'Vetir',                         brand = 'Unknown',         price = 100000,  category = 'military',       type = 'automobile', shop = 'none',   harness = false },
     { model = 'kosatka',         name = 'Kosatka',                       brand = 'Rune',            price = 100000,  category = 'military',       type = 'automobile', shop = 'none',   harness = false },
@@ -766,14 +776,39 @@ Shared.Vehicles = {
     { model = 'formula',         name = 'PR4',                           brand = 'Progen',          price = 100000,  category = 'openwheel',      type = 'automobile', shop = 'none',   harness = false },
 }
 
--- Compatibility with other scripts
-Shared.VehicleHashes = Shared.VehicleHashes or {}
-for i = 1, #Shared.Vehicles do
-    local hash = joaat(Shared.Vehicles[i].model)
+-- Indexing on hash
+Shared.VehicleHashes = {}
 
-    -- Add hash to vehicle, as well as spawnmode
-    Shared.Vehicles[i].hash = hash
-    Shared.Vehicles[i].spawnmode = Shared.Vehicles[i].model
+Shared.GetVehicleHashes = function()
+    -- Check if we still empty
+    if next(Shared.VehicleHashes) ~= nil then
+        return Shared.VehicleHashes
+    end
 
-    Shared.VehicleHashes[hash] = Shared.Vehicles[Shared.Vehicles[i].model]
+    if #Shared.Vehicles == 0 then
+        print('No vehicles to load')
+        return Shared.VehicleHashes
+    end
+
+    -- If empty, load the vehicles
+    local count = 0
+    for i = 1, #Shared.Vehicles do
+        local hash = joaat(Shared.Vehicles[i].model)
+        -- print(('Loading vehicle %s (%s, %s)'):format(Shared.Vehicles[i].name, Shared.Vehicles[i].model, hash))
+
+        Shared.Vehicles[i].hash = hash
+        Shared.VehicleHashes[hash] = Shared.Vehicles[i]
+
+        count = count + 1
+    end
+
+    -- Loading vehicle Police Vic (polvic2, 795348860)
+    print(('Loaded %d vehicles'):format(count))
 end
+
+-- print(joaat('polvic2'))
+-- print(('Polvic brand: %s, name: %s, price: %d'):format(
+--     Shared.VehicleHashes[joaat('polvic2')].brand,
+--     Shared.VehicleHashes[joaat('polvic2')].name,
+--     Shared.VehicleHashes[joaat('polvic2')].price
+-- ))
